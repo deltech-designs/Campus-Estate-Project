@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register — Campus Estate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'DM Sans', sans-serif; }
+        h1,h2 { font-family: 'Playfair Display', serif; }
+        .input-error { border-color: #dc2626 !important; }
+        .field-error { color:#dc2626; font-size:0.75rem; margin-top:0.3rem; }
+        .toast { transition: all 0.35s ease; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+<!-- Navbar (shared across all pages) -->
+<nav class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between shadow-sm">
+    <a href="index.html" class="flex items-center gap-2">
+        <div class="w-9 h-9 rounded-xl bg-blue-900 flex items-center justify-center text-white">🏠</div>
+        <div>
+            <div class="font-bold text-blue-900 text-base leading-none">CampusEstate</div>
+            <div class="text-xs text-gray-400">Management System</div>
+        </div>
+    </a>
+    <div class="flex items-center gap-3">
+        <a href="login.html"       class="text-sm text-blue-900 border border-blue-900 px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors">Login</a>
+        <a href="admin-login.html" class="text-sm text-gray-400 hover:text-gray-600 transition-colors">Admin ↗</a>
+    </div>
+</nav>
+
+<div class="min-h-screen flex">
+
+    <!-- Left Panel -->
+    <div class="hidden lg:flex lg:w-2/5 bg-blue-900 flex-col justify-between p-12">
+        <a href="index.html" class="text-white font-semibold text-sm hover:text-blue-200 transition-colors">← Back to Home</a>
+        <div>
+            <h2 class="text-4xl font-bold text-white mb-6 leading-tight">Find Your Perfect Student Home</h2>
+            <p class="text-blue-200 leading-relaxed mb-8 text-sm">Register once and manage your entire hostel experience online.</p>
+            <div class="space-y-3">
+                <div class="flex items-center gap-3 text-blue-100 text-sm"><div class="w-5 h-5 rounded-full bg-blue-400 flex items-center justify-center text-white text-xs font-bold">✓</div>State-based room matching</div>
+                <div class="flex items-center gap-3 text-blue-100 text-sm"><div class="w-5 h-5 rounded-full bg-blue-400 flex items-center justify-center text-white text-xs font-bold">✓</div>Instant request tracking</div>
+                <div class="flex items-center gap-3 text-blue-100 text-sm"><div class="w-5 h-5 rounded-full bg-blue-400 flex items-center justify-center text-white text-xs font-bold">✓</div>Maintenance reporting</div>
+                <div class="flex items-center gap-3 text-blue-100 text-sm"><div class="w-5 h-5 rounded-full bg-blue-400 flex items-center justify-center text-white text-xs font-bold">✓</div>24/7 online access</div>
+            </div>
+        </div>
+        <div class="text-blue-400 text-xs">© 2024 Campus Estate Management System</div>
+    </div>
+
+    <!-- Right Panel (form) -->
+    <div class="flex-1 flex items-start justify-center px-6 py-10 overflow-y-auto">
+        <div class="w-full max-w-lg">
+            <h1 class="text-3xl font-bold text-gray-900 mb-1">Create Account</h1>
+            <p class="text-gray-500 mb-8 text-sm">Fill in your details to register as a student.</p>
+
+            <!-- Error summary box (shown by JS if validation fails) -->
+            <div id="error-box" class="hidden bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+                <p class="text-red-700 font-semibold text-sm mb-1">Please fix the following errors:</p>
+                <ul id="error-list" class="list-disc list-inside text-red-600 text-sm space-y-1"></ul>
+            </div>
+
+            <!-- Success box (shown after successful submit) -->
+            <div id="success-box" class="hidden bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
+                <p class="text-green-700 font-semibold text-sm">✅ Registration successful! Redirecting to your dashboard...</p>
+            </div>
+
+            <!-- REGISTRATION FORM -->
+            <form id="register-form" novalidate class="space-y-5">
+
+                <!-- Full Name -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Full Name *</label>
+                    <input id="full_name" type="text" placeholder="e.g. Chukwuemeka Okonkwo"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                    <div id="err-full_name" class="field-error hidden"></div>
+                </div>
+
+                <!-- Matric Number -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Matriculation Number *</label>
+                    <input id="matric" type="text" placeholder="e.g. CSC/2021/001"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                    <div id="err-matric" class="field-error hidden"></div>
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Email Address *</label>
+                    <input id="email" type="email" placeholder="you@university.edu.ng"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                    <div id="err-email" class="field-error hidden"></div>
+                </div>
+
+                <!-- Password row -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Password *</label>
+                        <input id="password" type="password" placeholder="Min. 8 characters"
+                            class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                        <div id="err-password" class="field-error hidden"></div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Confirm Password *</label>
+                        <input id="confirm_pw" type="password" placeholder="Repeat password"
+                            class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                        <div id="err-confirm_pw" class="field-error hidden"></div>
+                    </div>
+                </div>
+
+                <!-- Gender & State row -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">Gender *</label>
+                        <select id="gender" class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                            <option value="">Select gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                        <div id="err-gender" class="field-error hidden"></div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">State of Origin *</label>
+                        <select id="state" class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                            <option value="">Select state</option>
+                            <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option>
+                            <option>Anambra</option><option>Bauchi</option><option>Bayelsa</option>
+                            <option>Benue</option><option>Borno</option><option>Cross River</option>
+                            <option>Delta</option><option>Ebonyi</option><option>Edo</option>
+                            <option>Ekiti</option><option>Enugu</option><option>FCT-Abuja</option>
+                            <option>Gombe</option><option>Imo</option><option>Jigawa</option>
+                            <option>Kaduna</option><option>Kano</option><option>Katsina</option>
+                            <option>Kebbi</option><option>Kogi</option><option>Kwara</option>
+                            <option>Lagos</option><option>Nasarawa</option><option>Niger</option>
+                            <option>Ogun</option><option>Ondo</option><option>Osun</option>
+                            <option>Oyo</option><option>Plateau</option><option>Rivers</option>
+                            <option>Sokoto</option><option>Taraba</option><option>Yobe</option>
+                            <option>Zamfara</option>
+                        </select>
+                        <div id="err-state" class="field-error hidden"></div>
+                    </div>
+                </div>
+
+                <!-- Phone (optional) -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Phone Number <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <input id="phone" type="tel" placeholder="+234 800 000 0000"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                </div>
+
+                <!-- Hostel Preference -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Hostel Room Preference *</label>
+                    <div class="space-y-2" id="pref-group">
+                        <label id="pref-same_state" class="flex items-start gap-3 p-3.5 border border-gray-200 rounded-xl cursor-pointer hover:bg-blue-50 hover:border-blue-400 transition-all">
+                            <input type="radio" name="hostel_pref" value="same_state" class="mt-0.5 accent-blue-900">
+                            <div>
+                                <div class="text-sm font-medium text-gray-800">Same State Hostel</div>
+                                <div class="text-xs text-gray-500">Room with students from your state of origin</div>
+                            </div>
+                        </label>
+                        <label id="pref-mixed" class="flex items-start gap-3 p-3.5 border border-gray-200 rounded-xl cursor-pointer hover:bg-blue-50 hover:border-blue-400 transition-all">
+                            <input type="radio" name="hostel_pref" value="mixed" class="mt-0.5 accent-blue-900">
+                            <div>
+                                <div class="text-sm font-medium text-gray-800">Mixed Hostel</div>
+                                <div class="text-xs text-gray-500">Room with students from different states</div>
+                            </div>
+                        </label>
+                        <label id="pref-no_preference" class="flex items-start gap-3 p-3.5 border border-blue-500 bg-blue-50 rounded-xl cursor-pointer hover:bg-blue-50 hover:border-blue-400 transition-all">
+                            <input type="radio" name="hostel_pref" value="no_preference" checked class="mt-0.5 accent-blue-900">
+                            <div>
+                                <div class="text-sm font-medium text-gray-800">No Preference</div>
+                                <div class="text-xs text-gray-500">Any available room — fastest allocation</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div id="err-pref" class="field-error hidden"></div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="submit-btn"
+                    class="w-full bg-blue-900 text-white font-semibold py-3.5 rounded-xl hover:bg-blue-800 transition-colors mt-2 flex items-center justify-center gap-2">
+                    <span id="btn-text">Create Account →</span>
+                    <span id="btn-spinner" class="hidden animate-spin text-lg">⏳</span>
+                </button>
+
+                <p class="text-center text-sm text-gray-500">
+                    Already have an account?
+                    <a href="login.html" class="text-blue-700 font-medium hover:underline">Sign in here</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast fixed top-6 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl font-medium text-sm text-white shadow-xl opacity-0 pointer-events-none -translate-y-4 transition-all">
+    <span id="toast-msg"></span>
+</div>
+
+<script>
+/* ── Radio preference highlight ──────────────────────────── */
+document.querySelectorAll('input[name="hostel_pref"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+        // Reset all preference labels
+        ['same_state','mixed','no_preference'].forEach(v => {
+            const lbl = document.getElementById('pref-' + v);
+            lbl.classList.remove('border-blue-500','bg-blue-50');
+            lbl.classList.add('border-gray-200');
+        });
+        // Highlight selected
+        const selected = document.getElementById('pref-' + radio.value);
+        selected.classList.add('border-blue-500','bg-blue-50');
+        selected.classList.remove('border-gray-200');
+    });
+});
+
+/* ── Clear individual field error on input ───────────────── */
+['full_name','matric','email','password','confirm_pw','gender','state'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', () => clearError(id));
+});
+
+/* ── Form Validation & Submit ────────────────────────────── */
+document.getElementById('register-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const fullName  = document.getElementById('full_name').value.trim();
+    const matric    = document.getElementById('matric').value.trim().toUpperCase();
+    const email     = document.getElementById('email').value.trim().toLowerCase();
+    const password  = document.getElementById('password').value;
+    const confirmPw = document.getElementById('confirm_pw').value;
+    const gender    = document.getElementById('gender').value;
+    const state     = document.getElementById('state').value;
+    const pref      = document.querySelector('input[name="hostel_pref"]:checked');
+
+    let valid = true;
+    const errors = [];
+
+    // Clear all previous errors
+    clearAllErrors();
+
+    // Full Name
+    if (fullName.length < 3) {
+        showError('full_name', 'Full name must be at least 3 characters.');
+        errors.push('Full name must be at least 3 characters.');
+        valid = false;
+    }
+
+    // Matric Number — format: CSC/2021/001
+    const matricRegex = /^[A-Z]{2,4}\/\d{4}\/\d{3,6}$/;
+    if (!matricRegex.test(matric)) {
+        showError('matric', 'Format must be like CSC/2021/001.');
+        errors.push('Invalid matric number format.');
+        valid = false;
+    }
+
+    // Email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showError('email', 'Please enter a valid email address.');
+        errors.push('Invalid email address.');
+        valid = false;
+    }
+
+    // Password
+    if (password.length < 8) {
+        showError('password', 'Password must be at least 8 characters.');
+        errors.push('Password is too short.');
+        valid = false;
+    }
+
+    // Confirm Password
+    if (password !== confirmPw) {
+        showError('confirm_pw', 'Passwords do not match.');
+        errors.push('Passwords do not match.');
+        valid = false;
+    }
+
+    // Gender
+    if (!gender) {
+        showError('gender', 'Please select your gender.');
+        errors.push('Gender is required.');
+        valid = false;
+    }
+
+    // State
+    if (!state) {
+        showError('state', 'Please select your state of origin.');
+        errors.push('State of origin is required.');
+        valid = false;
+    }
+
+    if (!valid) {
+        // Show error summary
+        const box  = document.getElementById('error-box');
+        const list = document.getElementById('error-list');
+        list.innerHTML = errors.map(e => `<li>${e}</li>`).join('');
+        box.classList.remove('hidden');
+        box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    }
+
+    // Hide error box
+    document.getElementById('error-box').classList.add('hidden');
+
+    // Show loading spinner
+    document.getElementById('btn-text').textContent = 'Creating Account...';
+    document.getElementById('btn-spinner').classList.remove('hidden');
+    document.getElementById('submit-btn').disabled = true;
+
+    // Simulate processing (in real app, PHP handles this)
+    setTimeout(() => {
+        document.getElementById('btn-text').textContent = 'Create Account →';
+        document.getElementById('btn-spinner').classList.add('hidden');
+        document.getElementById('submit-btn').disabled = false;
+
+        // Show success
+        document.getElementById('success-box').classList.remove('hidden');
+        showToast('Account created! Welcome, ' + fullName + '!', 'success');
+
+        // Redirect to dashboard after 2s
+        setTimeout(() => window.location.href = 'dashboard.html', 2000);
+    }, 1500);
+});
+
+/* ── Helpers ──────────────────────────────────────────────── */
+function showError(fieldId, message) {
+    const input = document.getElementById(fieldId);
+    const errEl = document.getElementById('err-' + fieldId);
+    if (input) input.classList.add('input-error', 'border-red-500');
+    if (errEl) { errEl.textContent = '⚠ ' + message; errEl.classList.remove('hidden'); }
+}
+
+function clearError(fieldId) {
+    const input = document.getElementById(fieldId);
+    const errEl = document.getElementById('err-' + fieldId);
+    if (input) input.classList.remove('input-error', 'border-red-500');
+    if (errEl) errEl.classList.add('hidden');
+}
+
+function clearAllErrors() {
+    ['full_name','matric','email','password','confirm_pw','gender','state'].forEach(clearError);
+}
+
+function showToast(message, type = 'info') {
+    const toast = document.getElementById('toast');
+    const colours = { info:'bg-blue-900', success:'bg-green-700', warning:'bg-amber-600', error:'bg-red-600' };
+    toast.className = `toast fixed top-6 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl font-medium text-sm text-white shadow-xl ${colours[type]}`;
+    document.getElementById('toast-msg').textContent = message;
+    toast.classList.remove('opacity-0','-translate-y-4','pointer-events-none');
+    toast.classList.add('opacity-100','translate-y-0');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => {
+        toast.classList.add('opacity-0','-translate-y-4','pointer-events-none');
+        toast.classList.remove('opacity-100','translate-y-0');
+    }, 4000);
+}
+</script>
+</body>
+</html>
