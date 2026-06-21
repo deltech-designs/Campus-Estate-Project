@@ -7,7 +7,7 @@ import { CreatePaymentDto } from './dtos/create-payment.dto';
 import { UpdatePaymentDto } from './dtos/update-payment.dto';
 import * as ctrl from './payments.controller';
 
-const router = Router();
+const router: Router = Router();
 router.get('/', authenticate, asyncWrapper(ctrl.getAllPayments));
 router.get('/:id', authenticate, asyncWrapper(ctrl.getPaymentById));
 router.post('/', authenticate, requireRole('admin', 'manager'), validateDto(CreatePaymentDto), asyncWrapper(ctrl.createPayment));

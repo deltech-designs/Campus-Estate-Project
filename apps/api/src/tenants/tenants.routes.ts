@@ -7,7 +7,7 @@ import { CreateTenantDto } from './dtos/create-tenant.dto';
 import { UpdateTenantDto } from './dtos/update-tenant.dto';
 import * as ctrl from './tenants.controller';
 
-const router = Router();
+const router: Router = Router();
 
 router.get('/', authenticate, asyncWrapper(ctrl.getAllTenants));
 router.get('/:id', authenticate, asyncWrapper(ctrl.getTenantById));

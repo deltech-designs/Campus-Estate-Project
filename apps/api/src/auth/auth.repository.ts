@@ -7,7 +7,7 @@ export class UserRepository {
   }
 
   async findById(id: string): Promise<DocumentType<User> | null> {
-    return UserModel.findOne({ _id: id, isDeleted: false }).lean();
+    return UserModel.findOne({ _id: id, isDeleted: false });
   }
 
   async create(data: Partial<User>): Promise<DocumentType<User>> {

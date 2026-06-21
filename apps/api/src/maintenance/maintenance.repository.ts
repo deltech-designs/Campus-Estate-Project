@@ -3,11 +3,11 @@ import type { DocumentType } from '@typegoose/typegoose';
 
 export class MaintenanceRepository {
   async findAll(): Promise<DocumentType<MaintenanceRequest>[]> {
-    return MaintenanceModel.find({ isDeleted: false }).lean();
+    return MaintenanceModel.find({ isDeleted: false });
   }
 
   async findById(id: string): Promise<DocumentType<MaintenanceRequest> | null> {
-    return MaintenanceModel.findOne({ _id: id, isDeleted: false }).lean();
+    return MaintenanceModel.findOne({ _id: id, isDeleted: false });
   }
 
   async create(data: Partial<MaintenanceRequest>): Promise<DocumentType<MaintenanceRequest>> {
@@ -15,7 +15,7 @@ export class MaintenanceRepository {
   }
 
   async update(id: string, data: Partial<MaintenanceRequest>): Promise<DocumentType<MaintenanceRequest> | null> {
-    return MaintenanceModel.findByIdAndUpdate(id, { $set: data }, { new: true }).lean();
+    return MaintenanceModel.findByIdAndUpdate(id, { $set: data }, { new: true });
   }
 
   async softDelete(id: string): Promise<void> {

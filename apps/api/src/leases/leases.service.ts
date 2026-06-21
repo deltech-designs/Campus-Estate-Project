@@ -16,12 +16,12 @@ export class LeaseService {
   }
 
   async createLease(dto: CreateLeaseDto): Promise<DocumentType<Lease>> {
-    return this.repo.create(dto);
+    return this.repo.create(dto as unknown as Partial<Lease>);
   }
 
   async updateLease(id: string, dto: UpdateLeaseDto): Promise<DocumentType<Lease>> {
     await this.getLeaseById(id);
-    const updated = await this.repo.update(id, dto);
+    const updated = await this.repo.update(id, dto as unknown as Partial<Lease>);
     if (!updated) throw { status: 500, message: 'Update failed', code: 'UPDATE_FAILED' };
     return updated;
   }

@@ -3,15 +3,15 @@ import type { DocumentType } from '@typegoose/typegoose';
 
 export class LeaseRepository {
   async findAll(): Promise<DocumentType<Lease>[]> {
-    return LeaseModel.find({ isDeleted: false }).lean();
+    return LeaseModel.find({ isDeleted: false });
   }
 
   async findById(id: string): Promise<DocumentType<Lease> | null> {
-    return LeaseModel.findOne({ _id: id, isDeleted: false }).lean();
+    return LeaseModel.findOne({ _id: id, isDeleted: false });
   }
 
   async findByTenant(tenantId: string): Promise<DocumentType<Lease>[]> {
-    return LeaseModel.find({ tenantId, isDeleted: false }).lean();
+    return LeaseModel.find({ tenantId, isDeleted: false });
   }
 
   async create(data: Partial<Lease>): Promise<DocumentType<Lease>> {
@@ -19,7 +19,7 @@ export class LeaseRepository {
   }
 
   async update(id: string, data: Partial<Lease>): Promise<DocumentType<Lease> | null> {
-    return LeaseModel.findByIdAndUpdate(id, { $set: data }, { new: true }).lean();
+    return LeaseModel.findByIdAndUpdate(id, { $set: data }, { new: true });
   }
 
   async softDelete(id: string): Promise<void> {

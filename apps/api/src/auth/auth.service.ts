@@ -49,7 +49,7 @@ export class AuthService {
   private signToken(user: DocumentType<User>): string {
     const payload: IJwtPayload = { id: String(user._id), role: user.role };
     return jwt.sign(payload, process.env['JWT_SECRET'] as string, {
-      expiresIn: process.env['JWT_EXPIRES_IN'] ?? '7d',
+      expiresIn: (process.env['JWT_EXPIRES_IN'] ?? '7d') as jwt.SignOptions['expiresIn'],
     });
   }
 

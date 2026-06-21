@@ -12,10 +12,10 @@ export class PaymentService {
     if (!p) throw { status: 404, message: 'Payment not found', code: 'NOT_FOUND' };
     return p;
   }
-  async create(dto: CreatePaymentDto): Promise<DocumentType<Payment>> { return this.repo.create(dto); }
+  async create(dto: CreatePaymentDto): Promise<DocumentType<Payment>> { return this.repo.create(dto as unknown as Partial<Payment>); }
   async update(id: string, dto: UpdatePaymentDto): Promise<DocumentType<Payment>> {
     await this.getById(id);
-    const updated = await this.repo.update(id, dto);
+    const updated = await this.repo.update(id, dto as unknown as Partial<Payment>);
     if (!updated) throw { status: 500, message: 'Update failed', code: 'UPDATE_FAILED' };
     return updated;
   }

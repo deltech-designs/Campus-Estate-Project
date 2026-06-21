@@ -7,7 +7,7 @@ import { CreateLeaseDto } from './dtos/create-lease.dto';
 import { UpdateLeaseDto } from './dtos/update-lease.dto';
 import * as ctrl from './leases.controller';
 
-const router = Router();
+const router: Router = Router();
 
 router.get('/', authenticate, asyncWrapper(ctrl.getAllLeases));
 router.get('/:id', authenticate, asyncWrapper(ctrl.getLeaseById));

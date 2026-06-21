@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Application } from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { errorHandler } from './shared/middleware/errorHandler';
@@ -11,7 +11,7 @@ import paymentRoutes from './payments/payments.routes';
 import vendorRoutes from './vendors/vendors.routes';
 import staffRoutes from './staff/staff.routes';
 
-const app = express();
+const app: Application = express();
 
 // ─── Global middleware ────────────────────────────────────────────────────────
 app.use(

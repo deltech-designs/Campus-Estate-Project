@@ -7,7 +7,7 @@ import { CreatePropertyDto } from './dtos/create-property.dto';
 import { UpdatePropertyDto } from './dtos/update-property.dto';
 import * as ctrl from './properties.controller';
 
-const router = Router();
+const router: Router = Router();
 
 router.get('/', authenticate, asyncWrapper(ctrl.getAllProperties));
 router.get('/:id', authenticate, asyncWrapper(ctrl.getPropertyById));

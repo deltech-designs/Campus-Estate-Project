@@ -8,7 +8,7 @@ import { Button } from '@/components/partials/Button';
 import { Badge } from '@/components/partials/Badge';
 import type { IProperty } from '@ems/shared';
 
-const statusVariant: Record<IProperty['status'], 'success' | 'warning' | 'danger' | 'neutral'> = {
+const statusVariant: Record<IProperty['status'], 'success' | 'warning' | 'danger' | 'neutral' | 'info'> = {
   available:   'success',
   occupied:    'info',
   maintenance: 'warning',

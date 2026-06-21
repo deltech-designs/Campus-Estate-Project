@@ -7,7 +7,7 @@ import { CreateVendorDto } from './dtos/create-vendor.dto';
 import { UpdateVendorDto } from './dtos/update-vendor.dto';
 import * as ctrl from './vendors.controller';
 
-const router = Router();
+const router: Router = Router();
 router.get('/', authenticate, asyncWrapper(ctrl.getAllVendors));
 router.get('/:id', authenticate, asyncWrapper(ctrl.getVendorById));
 router.post('/', authenticate, requireRole('admin', 'manager'), validateDto(CreateVendorDto), asyncWrapper(ctrl.createVendor));

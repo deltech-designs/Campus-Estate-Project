@@ -16,12 +16,12 @@ export class MaintenanceService {
   }
 
   async create(dto: CreateMaintenanceDto): Promise<DocumentType<MaintenanceRequest>> {
-    return this.repo.create(dto);
+    return this.repo.create(dto as unknown as Partial<MaintenanceRequest>);
   }
 
   async update(id: string, dto: UpdateMaintenanceDto): Promise<DocumentType<MaintenanceRequest>> {
     await this.getById(id);
-    const updated = await this.repo.update(id, dto);
+    const updated = await this.repo.update(id, dto as unknown as Partial<MaintenanceRequest>);
     if (!updated) throw { status: 500, message: 'Update failed', code: 'UPDATE_FAILED' };
     return updated;
   }

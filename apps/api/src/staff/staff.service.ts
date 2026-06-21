@@ -12,10 +12,10 @@ export class StaffService {
     if (!s) throw { status: 404, message: 'Staff not found', code: 'NOT_FOUND' };
     return s;
   }
-  async create(dto: CreateStaffDto): Promise<DocumentType<Staff>> { return this.repo.create(dto); }
+  async create(dto: CreateStaffDto): Promise<DocumentType<Staff>> { return this.repo.create(dto as unknown as Partial<Staff>); }
   async update(id: string, dto: UpdateStaffDto): Promise<DocumentType<Staff>> {
     await this.getById(id);
-    const updated = await this.repo.update(id, dto);
+    const updated = await this.repo.update(id, dto as unknown as Partial<Staff>);
     if (!updated) throw { status: 500, message: 'Update failed', code: 'UPDATE_FAILED' };
     return updated;
   }

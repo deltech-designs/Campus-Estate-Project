@@ -8,7 +8,7 @@ type Constructor<T = object> = new (...args: any[]) => T;
 
 export function PartialType<T>(Base: Constructor<T>): Constructor<Partial<T>> {
   // Copy all metadata from Base to the derived class so class-validator still works
-  class Partial extends (Base as Constructor) {}
-  Object.defineProperty(Partial, 'name', { value: `Partial${Base.name}` });
-  return Partial as Constructor<globalThis.Partial<T>>;
+  class PartialClass extends (Base as Constructor) {}
+  Object.defineProperty(PartialClass, 'name', { value: `Partial${Base.name}` });
+  return PartialClass as Constructor<globalThis.Partial<T>>;
 }

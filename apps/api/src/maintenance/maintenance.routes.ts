@@ -7,7 +7,7 @@ import { CreateMaintenanceDto } from './dtos/create-maintenance.dto';
 import { UpdateMaintenanceDto } from './dtos/update-maintenance.dto';
 import * as ctrl from './maintenance.controller';
 
-const router = Router();
+const router: Router = Router();
 
 router.get('/', authenticate, asyncWrapper(ctrl.getAllMaintenance));
 router.get('/:id', authenticate, asyncWrapper(ctrl.getMaintenanceById));

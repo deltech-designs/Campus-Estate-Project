@@ -7,7 +7,7 @@ import { CreateStaffDto } from './dtos/create-staff.dto';
 import { UpdateStaffDto } from './dtos/update-staff.dto';
 import * as ctrl from './staff.controller';
 
-const router = Router();
+const router: Router = Router();
 router.get('/', authenticate, asyncWrapper(ctrl.getAllStaff));
 router.get('/:id', authenticate, asyncWrapper(ctrl.getStaffById));
 router.post('/', authenticate, requireRole('admin'), validateDto(CreateStaffDto), asyncWrapper(ctrl.createStaff));

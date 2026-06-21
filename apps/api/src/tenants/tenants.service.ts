@@ -20,12 +20,12 @@ export class TenantService {
   async createTenant(dto: CreateTenantDto): Promise<DocumentType<Tenant>> {
     const existing = await this.repo.findByEmail(dto.email);
     if (existing) throw { status: 409, message: 'Email already in use', code: 'EMAIL_CONFLICT' };
-    return this.repo.create(dto);
+    return this.repo.create(dto as unknown as Partial<Tenant>);
   }
 
   async updateTenant(id: string, dto: UpdateTenantDto): Promise<DocumentType<Tenant>> {
     await this.getTenantById(id);
-    const updated = await this.repo.update(id, dto);
+    const updated = await this.repo.update(id, dto as unknown as Partial<Tenant>);
     if (!updated) throw { status: 500, message: 'Update failed', code: 'UPDATE_FAILED' };
     return updated;
   }
