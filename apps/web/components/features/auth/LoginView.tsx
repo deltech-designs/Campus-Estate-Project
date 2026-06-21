@@ -47,7 +47,7 @@ export function LoginView() {
             <Button type="submit" loading={isSubmitting} className="mt-2 w-full">Sign in</Button>
           </form>
           <p className="text-center text-sm text-[var(--color-muted)] mt-4">
-            Don't have an account?{' '}
+            {"Don't have an account?"}
             <Link href="/register" className="text-[var(--color-primary)] font-medium hover:underline">Register</Link>
           </p>
         </div>
