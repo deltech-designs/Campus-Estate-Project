@@ -15,8 +15,8 @@ export class Payment {
   @prop({ required: true, min: 0 }) amount!: number;
   @prop({ required: true }) dueDate!: Date;
   @prop() paidDate?: Date;
-  @prop({ required: true, enum: ['pending','paid','partial','overdue'], default: 'pending' }) status!: PaymentStatus;
-  @prop({ enum: ['bank_transfer','card','cash','ussd'] }) method?: PaymentMethod;
+  @prop({ required: true, type: () => String, enum: ['pending','paid','partial','overdue'], default: 'pending' }) status!: PaymentStatus;
+  @prop({ type: () => String, enum: ['bank_transfer','card','cash','ussd'] }) method?: PaymentMethod;
   @prop() receiptUrl?: string;
   @prop({ default: false }) isDeleted!: boolean;
 }

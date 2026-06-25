@@ -32,7 +32,7 @@ export class Tenant {
   @prop({ required: true })
   nin!: string;
 
-  @prop({ required: true, enum: ['active', 'inactive', 'blacklisted'], default: 'active' })
+  @prop({ required: true, type: () => String, enum: ['active', 'inactive', 'blacklisted'], default: 'active' })
   status!: TenantStatus;
 
   @prop({ required: true, _id: false, type: () => EmergencyContact })

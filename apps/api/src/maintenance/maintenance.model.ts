@@ -21,10 +21,10 @@ export class MaintenanceRequest {
   @prop({ required: true })
   description!: string;
 
-  @prop({ required: true, enum: ['low', 'medium', 'high', 'urgent'], default: 'medium' })
+  @prop({ required: true, type: () => String, enum: ['low', 'medium', 'high', 'urgent'], default: 'medium' })
   priority!: MaintenancePriority;
 
-  @prop({ required: true, enum: ['open', 'assigned', 'in_progress', 'completed', 'closed'], default: 'open' })
+  @prop({ required: true, type: () => String, enum: ['open', 'assigned', 'in_progress', 'completed', 'closed'], default: 'open' })
   status!: MaintenanceStatus;
 
   @prop({ ref: () => Vendor })

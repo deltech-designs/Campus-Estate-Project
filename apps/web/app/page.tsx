@@ -1,2 +1,5 @@
-import { redirect } from 'next/navigation';
-export default function RootPage() { redirect('/overview'); }
+import { LandingView } from '@/components/features/landing/LandingView';
+
+export default function RootPage() {
+  return <LandingView />;
+}

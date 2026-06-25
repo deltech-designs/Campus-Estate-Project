@@ -18,7 +18,7 @@ export class User {
   @prop({ required: true })
   password!: string;
 
-  @prop({ required: true, enum: ['admin', 'manager', 'tenant'], default: 'tenant' })
+  @prop({ required: true, type: () => String, enum: ['admin', 'manager', 'tenant'], default: 'tenant' })
   role!: UserRole;
 
   @prop({ default: true })

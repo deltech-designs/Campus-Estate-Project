@@ -9,11 +9,12 @@ export class Property {
   @prop({ required: true, trim: true })
   title!: string;
 
-  @prop({ required: true, enum: ['apartment', 'duplex', 'commercial', 'land'] })
+  @prop({ required: true, type: () => String, enum: ['apartment', 'duplex', 'commercial', 'land'] })
   type!: PropertyType;
 
   @prop({
     required: true,
+    type: () => String,
     enum: ['available', 'occupied', 'maintenance', 'inactive'],
     default: 'available',
   })

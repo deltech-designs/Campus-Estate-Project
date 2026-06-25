@@ -26,7 +26,7 @@ export class Lease {
   @prop({ required: true, min: 0 })
   securityDeposit!: number;
 
-  @prop({ required: true, enum: ['active', 'expired', 'terminated', 'renewed'], default: 'active' })
+  @prop({ required: true, type: () => String, enum: ['active', 'expired', 'terminated', 'renewed'], default: 'active' })
   status!: LeaseStatus;
 
   @prop({ default: false })

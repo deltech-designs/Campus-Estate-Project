@@ -2,36 +2,54 @@
 
 /* ─── Design Tokens ─────────────────────────────────────────────────────────── */
 @theme {
-  /* Brand colours */
-  --color-primary:       oklch(35% 0.18 240);   /* Deep estate navy */
-  --color-primary-light: oklch(50% 0.16 240);   /* Hover state */
-  --color-accent:        oklch(60% 0.16 160);   /* Status green */
-  --color-warning:       oklch(72% 0.18 75);    /* Overdue amber */
-  --color-danger:        oklch(52% 0.22 25);    /* Error red */
-  --color-surface:       oklch(98% 0.005 240);  /* Off-white background */
-  --color-surface-2:     oklch(95% 0.008 240);  /* Card/panel surface */
-  --color-border:        oklch(88% 0.01 240);   /* Subtle border */
-  --color-muted:         oklch(55% 0.02 240);   /* Secondary text */
-  --color-foreground:    oklch(18% 0.02 240);   /* Primary text */
+  /* ── Brand ──────────────────────────────── */
+  --color-primary:        oklch(38% 0.16 248);   /* Deep institutional navy */
+  --color-primary-hover:  oklch(32% 0.16 248);   /* Darker on hover */
+  --color-primary-light:  oklch(94% 0.04 248);   /* Tinted background / chips */
 
-  /* Sidebar */
-  --color-sidebar:       oklch(20% 0.06 240);   /* Dark navy sidebar */
-  --color-sidebar-text:  oklch(85% 0.02 240);
-  --color-sidebar-hover: oklch(28% 0.06 240);
-  --color-sidebar-active:oklch(35% 0.18 240);
+  /* ── Surface ─────────────────────────────── */
+  --color-surface:        oklch(99% 0.003 248);  /* Near-white page bg */
+  --color-surface-raised: oklch(100% 0 0);       /* Card / modal bg */
+  --color-surface-sunken: oklch(96% 0.006 248);  /* Input / table row bg */
+  --color-border:         oklch(89% 0.008 248);  /* Dividers, input borders */
 
-  /* Typography */
-  --font-sans:    'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Syne', ui-sans-serif, system-ui, sans-serif;
+  /* ── Text ────────────────────────────────── */
+  --color-text-primary:   oklch(18% 0.02 248);   /* Body / heading text */
+  --color-text-secondary: oklch(48% 0.02 248);   /* Meta, labels, captions */
+  --color-text-disabled:  oklch(70% 0.01 248);   /* Placeholder, disabled */
+  --color-text-inverse:   oklch(99% 0 0);        /* Text on dark bg */
 
-  /* Border radius */
-  --radius-card: 0.75rem;
-  --radius-btn:  0.5rem;
-  --radius-sm:   0.375rem;
+  /* ── Status / Semantic ───────────────────── */
+  --color-success:        oklch(54% 0.16 155);   /* Active lease, paid */
+  --color-success-bg:     oklch(95% 0.04 155);
+  --color-warning:        oklch(68% 0.17 68);    /* Overdue, expiring soon */
+  --color-warning-bg:     oklch(96% 0.05 68);
+  --color-danger:         oklch(52% 0.20 22);    /* Error, terminated, urgent */
+  --color-danger-bg:      oklch(96% 0.04 22);
+  --color-info:           oklch(56% 0.16 240);   /* Informational notices */
+  --color-info-bg:        oklch(95% 0.04 240);
 
-  /* Shadows */
-  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06);
-  --shadow-modal: 0 20px 60px -10px rgb(0 0 0 / 0.25);
+  /* ── Sidebar ─────────────────────────────── */
+  --color-sidebar-bg:     oklch(22% 0.06 248);   /* Dark navy sidebar */
+  --color-sidebar-text:   oklch(80% 0.02 248);   /* Muted sidebar labels */
+  --color-sidebar-active: oklch(99% 0 0);        /* Active nav item text */
+  --color-sidebar-hover:  oklch(30% 0.06 248);   /* Nav hover bg */
+  --color-sidebar-accent: oklch(62% 0.17 248);   /* Active indicator bar */
+
+  /* ── Typography ──────────────────────────── */
+  --font-sans:    'Inter', system-ui, sans-serif;
+  --font-display: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+
+  /* ── Spacing & Radius ────────────────────── */
+  --radius-sm:   0.375rem;   /* Tags, badges */
+  --radius-md:   0.625rem;   /* Inputs, buttons */
+  --radius-lg:   0.875rem;   /* Cards, modals */
+  --radius-xl:   1.25rem;    /* Full panels */
+
+  /* ── Shadows ─────────────────────────────── */
+  --shadow-card: 0 1px 3px oklch(18% 0.02 248 / 0.08), 0 1px 2px oklch(18% 0.02 248 / 0.06);
+  --shadow-modal: 0 10px 25px oklch(18% 0.02 248 / 0.15), 0 4px 10px oklch(18% 0.02 248 / 0.10);
 
   /* Animation */
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -49,7 +67,7 @@ html {
 
 body {
   background-color: var(--color-surface);
-  color: var(--color-foreground);
+  color: var(--color-text-primary);
   font-family: var(--font-sans);
   line-height: 1.6;
 }
@@ -58,4 +76,4 @@ body {
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 9999px; }
-::-webkit-scrollbar-thumb:hover { background: var(--color-muted); }
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-secondary); }

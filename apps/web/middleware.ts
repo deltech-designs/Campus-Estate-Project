@@ -7,6 +7,7 @@ export function middleware(req: NextRequest): NextResponse {
 
   // Allow auth routes and Next.js internals to pass through
   const isPublicRoute =
+    pathname === '/' ||
     pathname === '/login' ||
     pathname === '/register' ||
     pathname.startsWith('/_next') ||
