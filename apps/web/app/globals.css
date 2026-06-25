@@ -47,6 +47,11 @@
   --radius-lg:   0.875rem;   /* Cards, modals */
   --radius-xl:   1.25rem;    /* Full panels */
 
+  /* Aliases for compatibility */
+  --radius-card:          var(--radius-lg);
+  --radius-btn:           var(--radius-md);
+  --color-sidebar:        var(--color-sidebar-bg);
+
   /* ── Shadows ─────────────────────────────── */
   --shadow-card: 0 1px 3px oklch(18% 0.02 248 / 0.08), 0 1px 2px oklch(18% 0.02 248 / 0.06);
   --shadow-modal: 0 10px 25px oklch(18% 0.02 248 / 0.15), 0 4px 10px oklch(18% 0.02 248 / 0.10);

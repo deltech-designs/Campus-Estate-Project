@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import type { IUser } from '@ems/shared';
+import type { IUser, UserRole } from '@ems/shared';
 import { authService } from '@/services/auth.service';
 
 interface AuthContextValue {
@@ -9,7 +9,7 @@ interface AuthContextValue {
   isLoading: boolean;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (firstName: string, lastName: string, email: string, password: string) => Promise<void>;
+  register: (firstName: string, lastName: string, email: string, password: string, role?: UserRole) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -44,12 +44,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     lastName: string,
     email: string,
     password: string,
+    role?: UserRole,
   ): Promise<void> => {
     const { user: registered } = await authService.register({
       firstName,
       lastName,
       email,
       password,
+      role,
     });
     setUser(registered);
   };

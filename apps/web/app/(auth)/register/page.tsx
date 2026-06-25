@@ -1,2 +1,3 @@
-import { RegisterView } from '@/components/features/auth/RegisterView';
-export default function RegisterPage() { return <RegisterView />; }
+import { RegisterRoleSelect } from '@/components/features/auth/RegisterRoleSelect';
+export default function RegisterPage() { return <RegisterRoleSelect />; }
+

@@ -4,6 +4,7 @@ import { PropertyCard } from './PropertyCard';
 import { Button } from '@/components/partials/Button';
 import type { IEnhancedProperty } from './types';
 import type { PropertyType } from '@ems/shared';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface PropertyGridProps {
   properties: IEnhancedProperty[];
@@ -39,57 +40,33 @@ export function PropertyGrid({
         </div>
 
         {/* Category selection bar */}
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[var(--color-surface-sunken)] border border-[var(--color-border)] rounded-2xl">
-          <button
-            onClick={() => setActiveTab('all')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
-              activeTab === 'all'
-                ? 'bg-[var(--color-surface-raised)] text-[var(--color-primary)] shadow-sm'
-                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-            }`}
-          >
-            All Spaces
-          </button>
-          <button
-            onClick={() => setActiveTab('apartment')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
-              activeTab === 'apartment'
-                ? 'bg-[var(--color-surface-raised)] text-[var(--color-primary)] shadow-sm'
-                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-            }`}
-          >
-            Apartments
-          </button>
-          <button
-            onClick={() => setActiveTab('duplex')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
-              activeTab === 'duplex'
-                ? 'bg-[var(--color-surface-raised)] text-[var(--color-primary)] shadow-sm'
-                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-            }`}
-          >
-            Shared Duplex
-          </button>
-          <button
-            onClick={() => setActiveTab('commercial')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
-              activeTab === 'commercial'
-                ? 'bg-[var(--color-surface-raised)] text-[var(--color-primary)] shadow-sm'
-                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-            }`}
-          >
-            Studios / Hubs
-          </button>
-          <button
-            onClick={() => setActiveTab('land')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
-              activeTab === 'land'
-                ? 'bg-[var(--color-surface-raised)] text-[var(--color-primary)] shadow-sm'
-                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-            }`}
-          >
-            Plots
-          </button>
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[var(--color-surface-sunken)] border border-[var(--color-border)] rounded-2xl relative">
+          {([
+            { id: 'all', label: 'All Spaces' },
+            { id: 'apartment', label: 'Apartments' },
+            { id: 'duplex', label: 'Shared Duplex' },
+            { id: 'commercial', label: 'Studios / Hubs' },
+            { id: 'land', label: 'Plots' }
+          ] as const).map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`relative px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer z-10 ${
+                activeTab === tab.id
+                  ? 'text-[var(--color-primary)] font-extrabold'
+                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+              }`}
+            >
+              {tab.label}
+              {activeTab === tab.id && (
+                <motion.span
+                  layoutId="activeTabBackground"
+                  className="absolute inset-0 bg-[var(--color-surface-raised)] rounded-xl shadow-sm -z-10"
+                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                />
+              )}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -111,17 +88,30 @@ export function PropertyGrid({
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {properties.map(p => (
-            <PropertyCard
-              key={p._id}
-              property={p}
-              isWishlisted={wishlist.includes(p._id)}
-              onToggleWishlist={onToggleWishlist}
-              onViewDetails={onViewDetails}
-            />
-          ))}
-        </div>
+        <motion.div
+          layout
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          <AnimatePresence mode="popLayout">
+            {properties.map(p => (
+              <motion.div
+                key={p._id}
+                layout
+                initial={{ opacity: 0, scale: 0.9, y: 15 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 15 }}
+                transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+              >
+                <PropertyCard
+                  property={p}
+                  isWishlisted={wishlist.includes(p._id)}
+                  onToggleWishlist={onToggleWishlist}
+                  onViewDetails={onViewDetails}
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       )}
 
     </section>

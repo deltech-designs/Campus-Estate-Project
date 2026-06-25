@@ -1,6 +1,7 @@
 'use client';
 
 import type { PropertyType } from '@ems/shared';
+import { motion } from 'framer-motion';
 
 interface LandingSearchPanelProps {
   searchTerm: string;
@@ -37,7 +38,17 @@ export function LandingSearchPanel({
     searchTerm || selectedZone !== 'all' || activeTab !== 'all' || selectedBedrooms !== 'all' || priceRange !== 'all';
 
   return (
-    <div className="mt-14 max-w-5xl mx-auto bg-[var(--color-surface-raised)]/80 backdrop-blur-xl p-5 rounded-[var(--radius-xl)] shadow-[var(--shadow-modal)] border border-[var(--color-border)]">
+    <motion.div
+      initial={{ opacity: 0, y: 30, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{
+        type: 'spring',
+        stiffness: 70,
+        damping: 15,
+        delay: 0.45,
+      }}
+      className="mt-14 max-w-5xl mx-auto bg-[var(--color-surface-raised)]/80 backdrop-blur-xl p-5 rounded-[var(--radius-xl)] shadow-[var(--shadow-modal)] border border-[var(--color-border)]"
+    >
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         
         {/* Location Text Search */}
@@ -125,6 +136,6 @@ export function LandingSearchPanel({
           </button>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
