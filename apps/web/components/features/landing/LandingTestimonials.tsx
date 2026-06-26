@@ -68,7 +68,7 @@ export function LandingTestimonials() {
               </p>
             </div>
             <div className="mt-8 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center font-bold text-indigo-700 text-xs">
+              <div className="w-10 h-10 rounded-full bg-[var(--color-primary-light)] flex items-center justify-center font-bold text-[var(--color-primary)] text-xs">
                 CO
               </div>
               <div>
@@ -90,7 +90,7 @@ export function LandingTestimonials() {
               </p>
             </div>
             <div className="mt-8 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center font-bold text-teal-700 text-xs">
+              <div className="w-10 h-10 rounded-full bg-[var(--color-info-bg)] flex items-center justify-center font-bold text-[var(--color-info)] text-xs">
                 FA
               </div>
               <div>
@@ -112,7 +112,7 @@ export function LandingTestimonials() {
               </p>
             </div>
             <div className="mt-8 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center font-bold text-emerald-700 text-xs">
+              <div className="w-10 h-10 rounded-full bg-[var(--color-success-bg)] flex items-center justify-center font-bold text-[var(--color-success)] text-xs">
                 TE
               </div>
               <div>

@@ -7,11 +7,11 @@ interface BadgeProps {
 }
 
 const variantStyles: Record<BadgeVariant, string> = {
-  success: 'bg-[oklch(95%_0.06_160)] text-[oklch(35%_0.16_160)]',
-  warning: 'bg-[oklch(96%_0.08_75)] text-[oklch(45%_0.18_75)]',
-  danger:  'bg-[oklch(96%_0.06_25)] text-[oklch(40%_0.22_25)]',
-  info:    'bg-[oklch(95%_0.06_240)] text-[oklch(35%_0.18_240)]',
-  neutral: 'bg-[var(--color-surface-2)] text-[var(--color-muted)]',
+  success: 'bg-[var(--color-success-bg)] text-[var(--color-success)]',
+  warning: 'bg-[var(--color-warning-bg)] text-[var(--color-warning)]',
+  danger:  'bg-[var(--color-danger-bg)] text-[var(--color-danger)]',
+  info:    'bg-[var(--color-info-bg)] text-[var(--color-info)]',
+  neutral: 'bg-[var(--color-surface-sunken)] text-[var(--color-text-secondary)]',
 };
 
 export function Badge({ children, variant = 'neutral', className = '' }: BadgeProps) {

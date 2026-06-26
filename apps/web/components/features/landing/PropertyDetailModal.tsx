@@ -3,6 +3,7 @@
 import { Badge } from '@/components/partials/Badge';
 import { Button } from '@/components/partials/Button';
 import type { IEnhancedProperty } from './types';
+import { motion } from 'framer-motion';
 
 interface PropertyDetailModalProps {
   property: IEnhancedProperty | null;
@@ -32,8 +33,20 @@ export function PropertyDetailModal({
   if (!property) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-fade-in">
-      <div className="relative bg-[var(--color-surface-raised)] rounded-[var(--radius-xl)] shadow-[var(--shadow-modal)] border border-[var(--color-border)] max-w-2xl w-full overflow-hidden flex flex-col max-h-[90vh]">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[var(--color-sidebar-bg)]/60 backdrop-blur-md"
+    >
+      <motion.div
+        initial={{ scale: 0.95, y: 15, opacity: 0 }}
+        animate={{ scale: 1, y: 0, opacity: 1 }}
+        exit={{ scale: 0.95, y: 15, opacity: 0 }}
+        transition={{ type: 'spring', stiffness: 350, damping: 28 }}
+        className="relative bg-[var(--color-surface-raised)] rounded-[var(--radius-xl)] shadow-[var(--shadow-modal)] border border-[var(--color-border)] max-w-2xl w-full overflow-hidden flex flex-col max-h-[90vh]"
+      >
         
         {/* Visual Header Banner */}
         <div className="h-52 bg-gradient-to-tr from-[var(--color-sidebar-bg)] to-[var(--color-primary)] flex items-center justify-center text-white relative">
@@ -99,7 +112,7 @@ export function PropertyDetailModal({
           {/* Stylized CSS Proximity Map */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-secondary)] mb-3">Campus Proximity Route Map</h4>
-            <div className="relative h-24 bg-slate-900 rounded-[var(--radius-lg)] border border-slate-800 overflow-hidden p-4 flex items-center justify-between">
+            <div className="relative h-24 bg-[var(--color-sidebar-bg)] rounded-[var(--radius-lg)] border border-white/10 overflow-hidden p-4 flex items-center justify-between">
               <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] bg-[size:10px_10px] pointer-events-none" />
               <div className="absolute top-1/2 left-[15%] right-[15%] h-1 bg-dashed border-t border-white/20 -translate-y-1/2 z-0" />
               
@@ -108,13 +121,13 @@ export function PropertyDetailModal({
                 <div className="w-9 h-9 rounded-xl bg-[var(--color-primary-light)] border border-white/20 flex items-center justify-center shadow-lg text-white">
                   🏠
                 </div>
-                <span className="text-[10px] font-bold text-slate-300">Space</span>
+                <span className="text-[10px] font-bold text-white/70">Space</span>
               </div>
 
               {/* Verified badge middle */}
               <div className="relative z-10 flex flex-col items-center bg-black/40 backdrop-blur border border-white/10 px-3 py-1 rounded-xl">
                 <span className="text-[10px] font-black text-[var(--color-success)]">{property.walkMinutes} min walk</span>
-                <span className="text-[9px] font-bold text-slate-400">Route verified</span>
+                <span className="text-[9px] font-bold text-white/50">Route verified</span>
               </div>
 
               {/* Campus location */}
@@ -122,7 +135,7 @@ export function PropertyDetailModal({
                 <div className="w-9 h-9 rounded-xl bg-[var(--color-success)] border border-white/20 flex items-center justify-center shadow-lg text-white">
                   🏫
                 </div>
-                <span className="text-[10px] font-bold text-slate-300">{property.estateZone}</span>
+                <span className="text-[10px] font-bold text-white/70">{property.estateZone}</span>
               </div>
             </div>
           </div>
@@ -180,7 +193,7 @@ export function PropertyDetailModal({
 
           {/* Alert check-ins */}
           {showApplySuccess && (
-            <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 p-4 rounded-2xl text-xs font-semibold text-center animate-pulse">
+            <div className="bg-[var(--color-success-bg)] border border-[var(--color-success)]/20 text-[var(--color-success)] p-4 rounded-2xl text-xs font-semibold text-center animate-pulse">
               ✓ Rent Application submitted successfully! Connecting to your Dashboard tenancy files...
             </div>
           )}
@@ -201,7 +214,7 @@ export function PropertyDetailModal({
             </Button>
           )}
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

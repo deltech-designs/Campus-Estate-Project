@@ -72,7 +72,84 @@ export function LandingHero() {
       animate="visible"
       className="max-w-7xl mx-auto px-6 text-center relative z-10"
     >
-      
+      {/* Central radial glow backdrop for text contrast and premium feel */}
+      <div className="absolute top-[25%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[120%] rounded-full bg-[radial-gradient(circle,var(--color-primary-light)/0.5_0%,transparent_65%)] pointer-events-none -z-10 filter blur-3xl animate-[pulse_6s_ease-in-out_infinite]" />
+
+      {/* Floating Glassmorphic Card - Left (Desktop only) */}
+      <motion.div
+        initial={{ opacity: 0, x: -50, y: 0 }}
+        animate={{ 
+          opacity: 1, 
+          x: 0,
+          y: [0, -10, 0]
+        }}
+        transition={{
+          opacity: { delay: 0.6, duration: 0.5 },
+          x: { delay: 0.6, duration: 0.5, type: 'spring' },
+          y: { 
+            repeat: Infinity, 
+            duration: 5, 
+            ease: "easeInOut" 
+          }
+        }}
+        className="hidden lg:flex absolute lg:left-[2%] xl:left-[-6%] top-[40%] w-60 p-4 rounded-[var(--radius-lg)] bg-gradient-to-br from-[var(--color-surface-raised)]/90 to-[var(--color-success-bg)]/80 backdrop-blur-xl border border-[var(--color-success)]/15 shadow-xl shadow-[var(--color-success)]/10 flex-col gap-2.5 text-left pointer-events-none"
+      >
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--color-success)] px-2 py-0.5 rounded-full bg-[var(--color-success-bg)]">
+            Verified Room
+          </span>
+          <span className="text-xs text-[var(--color-text-secondary)] font-bold flex items-center gap-0.5">
+            📍 Yaba
+          </span>
+        </div>
+        <div>
+          <h4 className="text-xs font-black text-[var(--color-text-primary)] font-display leading-snug">Ivy Heights Studio</h4>
+          <p className="text-[10px] text-[var(--color-text-secondary)] mt-0.5">200m from North Gate (3 min walk)</p>
+        </div>
+        <div className="flex items-center justify-between mt-1 pt-2 border-t border-[var(--color-border)]/50">
+          <span className="text-xs font-extrabold text-[var(--color-primary)]">₦180,000<span className="text-[9px] text-[var(--color-text-secondary)] font-normal">/mo</span></span>
+          <span className="text-[9px] text-[var(--color-success)] font-extrabold">✓ Available Now</span>
+        </div>
+      </motion.div>
+
+      {/* Floating Glassmorphic Card - Right (Desktop only) */}
+      <motion.div
+        initial={{ opacity: 0, x: 50, y: 0 }}
+        animate={{ 
+          opacity: 1, 
+          x: 0,
+          y: [0, 10, 0]
+        }}
+        transition={{
+          opacity: { delay: 0.8, duration: 0.5 },
+          x: { delay: 0.8, duration: 0.5, type: 'spring' },
+          y: { 
+            repeat: Infinity, 
+            duration: 6, 
+            ease: "easeInOut" 
+          }
+        }}
+        className="hidden lg:flex absolute lg:right-[2%] xl:right-[-6%] top-[56%] w-60 p-4 rounded-[var(--radius-lg)] bg-gradient-to-br from-[var(--color-surface-raised)]/90 to-[var(--color-info-bg)]/80 backdrop-blur-xl border border-[var(--color-info)]/15 shadow-xl shadow-[var(--color-info)]/10 flex-col gap-2.5 text-left pointer-events-none"
+      >
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--color-info)] px-2 py-0.5 rounded-full bg-[var(--color-info-bg)]">
+            Smart Lease
+          </span>
+          <span className="text-xs text-[var(--color-text-secondary)] font-bold">
+            🛡️ Escrow Active
+          </span>
+        </div>
+        <div>
+          <h4 className="text-xs font-black text-[var(--color-text-primary)] font-display leading-snug">Digital Rental Agreement</h4>
+          <p className="text-[10px] text-[var(--color-text-secondary)] mt-0.5">Verified landlord & tenant KYC signature</p>
+        </div>
+        <div className="flex items-center justify-between mt-1 pt-2 border-t border-[var(--color-border)]/50">
+          <span className="text-[9px] text-[var(--color-text-secondary)] font-normal">Commissions</span>
+          <span className="text-xs font-extrabold text-[var(--color-danger)] line-through">₦45k</span>
+          <span className="text-xs font-black text-[var(--color-success)] bg-[var(--color-success-bg)] px-1.5 py-0.5 rounded">₦0</span>
+        </div>
+      </motion.div>
+
       {/* ─── Premium Verified Badge ────────────────────────────────────────── */}
       <motion.div
         variants={badgeVariants}
@@ -98,7 +175,7 @@ export function LandingHero() {
         className="text-4xl sm:text-7xl font-extrabold text-[var(--color-text-primary)] font-display leading-[1.08] tracking-tight max-w-5xl mx-auto"
       >
         Find Your Next Campus Home <br />
-        <span className="bg-gradient-to-r from-[var(--color-primary)] via-indigo-600 to-[var(--color-success)] bg-clip-text text-transparent">
+        <span className="bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-info)] to-[var(--color-success)] bg-clip-text text-transparent">
           Without the Agent Fees.
         </span>
       </motion.h1>
@@ -134,7 +211,7 @@ export function LandingHero() {
           variants={trustItemVariants}
           className="flex items-center gap-2 group cursor-pointer hover:text-[var(--color-text-primary)] transition-colors"
         >
-          <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center transition-transform group-hover:scale-105">
+          <div className="w-7 h-7 rounded-lg bg-[var(--color-success-bg)] text-[var(--color-success)] flex items-center justify-center transition-transform group-hover:scale-105">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
             </svg>
@@ -146,7 +223,7 @@ export function LandingHero() {
           variants={trustItemVariants}
           className="flex items-center gap-2 group cursor-pointer hover:text-[var(--color-text-primary)] transition-colors"
         >
-          <div className="w-7 h-7 rounded-lg bg-orange-50 text-orange-700 flex items-center justify-center transition-transform group-hover:scale-105">
+          <div className="w-7 h-7 rounded-lg bg-[var(--color-warning-bg)] text-[var(--color-warning)] flex items-center justify-center transition-transform group-hover:scale-105">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5h16.5m-18 4.5h16.5m-18 4.5h16.5m-18 4.5h16.5m-16.5 0h16.5M12 9v9m-3-6H6m12 0h-3" />
             </svg>

@@ -2,13 +2,14 @@
 
 import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { propertiesService } from '@/services/properties.service';
 import type { PropertyType } from '@ems/shared';
 import type { IEnhancedProperty } from './types';
 
 // Subcomponents imports
-import { LandingHeader } from './LandingHeader';
+import { Navbar } from '@/components/layout/Navbar';
 import { LandingHero } from './LandingHero';
 import { LandingSearchPanel } from './LandingSearchPanel';
 import { PropertyGrid } from './PropertyGrid';
@@ -284,13 +285,13 @@ export function LandingView() {
       
       {/* Dynamic graphic backgrounds */}
       <div className="absolute inset-0 -z-30 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,oklch(90%_0.01_248/0.35)_1px,transparent_1px),linear-gradient(to_bottom,oklch(90%_0.01_248/0.35)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[radial-gradient(circle,oklch(85%_0.08_248/0.25)_0%,transparent_70%)] filter blur-3xl" />
-        <div className="absolute top-[20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-[radial-gradient(circle,oklch(90%_0.05_155/0.2)_0%,transparent_60%)] filter blur-3xl" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--color-border)/0.35_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)/0.35_1px,transparent_1px)] bg-[size:4rem_4rem]" />
+        <div className="absolute top-[-10%] left-[-10%] w-[55%] h-[55%] rounded-full bg-[radial-gradient(circle,var(--color-primary-light)_0%,transparent_70%)] filter blur-3xl animate-float" />
+        <div className="absolute top-[25%] right-[-10%] w-[65%] h-[65%] rounded-full bg-[radial-gradient(circle,var(--color-success-bg)_0%,transparent_65%)] filter blur-3xl animate-[float_10s_ease-in-out_infinite_reverse]" />
       </div>
 
       {/* Navigation Top bar */}
-      <LandingHeader isAuthenticated={isAuthenticated} isAuthLoading={isAuthLoading} />
+      <Navbar />
 
       {/* Main hero page container */}
       <section className="relative pt-20 pb-24 md:pt-28 md:pb-36 overflow-hidden">
@@ -335,21 +336,25 @@ export function LandingView() {
       <LandingTestimonials />
 
       {/* Detailed showcase profile drawer */}
-      <PropertyDetailModal
-        property={selectedProperty}
-        onClose={() => {
-          setSelectedProperty(null);
-          setShowApplySuccess(false);
-        }}
-        isAuthenticated={isAuthenticated}
-        onApply={handleApply}
-        showApplySuccess={showApplySuccess}
-        leaseMonths={leaseMonths}
-        setLeaseMonths={setLeaseMonths}
-        includeUtilities={includeUtilities}
-        setIncludeUtilities={setIncludeUtilities}
-        computedPricing={computedPricing}
-      />
+      <AnimatePresence>
+        {selectedProperty && (
+          <PropertyDetailModal
+            property={selectedProperty}
+            onClose={() => {
+              setSelectedProperty(null);
+              setShowApplySuccess(false);
+            }}
+            isAuthenticated={isAuthenticated}
+            onApply={handleApply}
+            showApplySuccess={showApplySuccess}
+            leaseMonths={leaseMonths}
+            setLeaseMonths={setLeaseMonths}
+            includeUtilities={includeUtilities}
+            setIncludeUtilities={setIncludeUtilities}
+            computedPricing={computedPricing}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Institutional footer */}
       <footer className="bg-[var(--color-sidebar-bg)] text-[var(--color-sidebar-text)] py-16 mt-auto border-t border-white/5">

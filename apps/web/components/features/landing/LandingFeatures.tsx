@@ -56,7 +56,7 @@ export function LandingFeatures() {
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8"
         >
           <motion.div variants={itemVariants} className="group bg-[var(--color-surface)] p-8 rounded-[var(--radius-xl)] border border-[var(--color-border)] hover:border-[var(--color-primary)]/30 shadow-sm hover:shadow-lg transition-all duration-300">
-            <div className="w-12 h-12 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center text-2xl mb-6 shadow-sm group-hover:scale-105 transition-transform">
+            <div className="w-12 h-12 rounded-2xl bg-[var(--color-warning-bg)] text-[var(--color-warning)] flex items-center justify-center text-2xl mb-6 shadow-sm group-hover:scale-105 transition-transform">
               🎓
             </div>
             <h3 className="text-base font-extrabold text-[var(--color-text-primary)] font-display">Proximity Map Zones</h3>
@@ -66,7 +66,7 @@ export function LandingFeatures() {
           </motion.div>
 
           <motion.div variants={itemVariants} className="group bg-[var(--color-surface)] p-8 rounded-[var(--radius-xl)] border border-[var(--color-border)] hover:border-[var(--color-primary)]/30 shadow-sm hover:shadow-lg transition-all duration-300">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl mb-6 shadow-sm group-hover:scale-105 transition-transform">
+            <div className="w-12 h-12 rounded-2xl bg-[var(--color-success-bg)] text-[var(--color-success)] flex items-center justify-center text-2xl mb-6 shadow-sm group-hover:scale-105 transition-transform">
               📄
             </div>
             <h3 className="text-base font-extrabold text-[var(--color-text-primary)] font-display">Smart Paperless Leases</h3>
@@ -76,7 +76,7 @@ export function LandingFeatures() {
           </motion.div>
 
           <motion.div variants={itemVariants} className="group bg-[var(--color-surface)] p-8 rounded-[var(--radius-xl)] border border-[var(--color-border)] hover:border-[var(--color-primary)]/30 shadow-sm hover:shadow-lg transition-all duration-300">
-            <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl mb-6 shadow-sm group-hover:scale-105 transition-transform">
+            <div className="w-12 h-12 rounded-2xl bg-[var(--color-info-bg)] text-[var(--color-info)] flex items-center justify-center text-2xl mb-6 shadow-sm group-hover:scale-105 transition-transform">
               💳
             </div>
             <h3 className="text-base font-extrabold text-[var(--color-text-primary)] font-display">Integrated Banking</h3>
@@ -86,7 +86,7 @@ export function LandingFeatures() {
           </motion.div>
 
           <motion.div variants={itemVariants} className="group bg-[var(--color-surface)] p-8 rounded-[var(--radius-xl)] border border-[var(--color-border)] hover:border-[var(--color-primary)]/30 shadow-sm hover:shadow-lg transition-all duration-300">
-            <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl mb-6 shadow-sm group-hover:scale-105 transition-transform">
+            <div className="w-12 h-12 rounded-2xl bg-[var(--color-primary-light)] text-[var(--color-primary)] flex items-center justify-center text-2xl mb-6 shadow-sm group-hover:scale-105 transition-transform">
               🔧
             </div>
             <h3 className="text-base font-extrabold text-[var(--color-text-primary)] font-display">Fast Track Maintenance</h3>
