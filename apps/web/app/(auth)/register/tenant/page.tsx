@@ -1,5 +1,5 @@
-import { RegisterView } from '@/components/features/auth/RegisterView';
+import { TenantRegisterView } from '@/components/features/auth/TenantRegisterView';
 
 export default function TenantRegisterPage() {
-  return <RegisterView role="tenant" />;
+  return <TenantRegisterView />;
 }

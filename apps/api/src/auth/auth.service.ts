@@ -60,6 +60,7 @@ export class AuthService {
       lastName: user.lastName,
       email: user.email,
       role: user.role,
+      phone: user.phone,
       isActive: user.isActive,
       createdAt: (user as unknown as { createdAt: Date }).createdAt?.toISOString() ?? '',
       updatedAt: (user as unknown as { updatedAt: Date }).updatedAt?.toISOString() ?? '',

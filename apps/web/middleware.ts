@@ -8,8 +8,8 @@ export function middleware(req: NextRequest): NextResponse {
   // Allow auth routes and Next.js internals to pass through
   const isPublicRoute =
     pathname === '/' ||
-    pathname === '/login' ||
-    pathname === '/register' ||
+    pathname.startsWith('/login') ||
+    pathname.startsWith('/register') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
     pathname === '/favicon.ico';

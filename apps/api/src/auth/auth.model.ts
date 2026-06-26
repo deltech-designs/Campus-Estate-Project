@@ -21,6 +21,9 @@ export class User {
   @prop({ required: true, type: () => String, enum: ['admin', 'manager', 'tenant'], default: 'tenant' })
   role!: UserRole;
 
+  @prop({ trim: true })
+  phone?: string;
+
   @prop({ default: true })
   isActive!: boolean;
 

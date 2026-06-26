@@ -20,4 +20,8 @@ export class RegisterDto {
   @IsEnum(['admin', 'manager', 'tenant'], { message: 'Invalid role' })
   @IsOptional()
   role?: UserRole;
+
+  @IsString()
+  @IsOptional()
+  phone?: string;
 }

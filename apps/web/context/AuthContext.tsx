@@ -9,7 +9,14 @@ interface AuthContextValue {
   isLoading: boolean;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (firstName: string, lastName: string, email: string, password: string, role?: UserRole) => Promise<void>;
+  register: (
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string,
+    role?: UserRole,
+    phone?: string,
+  ) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -45,6 +52,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     email: string,
     password: string,
     role?: UserRole,
+    phone?: string,
   ): Promise<void> => {
     const { user: registered } = await authService.register({
       firstName,
@@ -52,6 +60,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       email,
       password,
       role,
+      phone,
     });
     setUser(registered);
   };

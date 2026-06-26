@@ -1,5 +1,5 @@
-import { RegisterView } from '@/components/features/auth/RegisterView';
+import { LandlordRegisterView } from '@/components/features/auth/LandlordRegisterView';
 
 export default function LandlordRegisterPage() {
-  return <RegisterView role="manager" />;
+  return <LandlordRegisterView />;
 }

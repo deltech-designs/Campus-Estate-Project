@@ -8,6 +8,7 @@ export interface IUser {
   lastName: string;
   email: string;
   role: UserRole;
+  phone?: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -18,6 +19,7 @@ export interface IRegisterPayload {
   lastName: string;
   email: string;
   password: string;
+  phone?: string;
   role?: UserRole;
 }
 
