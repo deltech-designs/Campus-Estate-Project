@@ -1,4 +1,4 @@
-import type { IUser, ILoginPayload, IRegisterPayload } from '@ems/shared';
+import type { IUser, ILoginPayload, IRegisterPayload, IForgotPasswordPayload, IResetPasswordPayload, IRegisterResponse, IVerifyOtpPayload } from '@ems/shared';
 
 const API = process.env['NEXT_PUBLIC_API_URL']!;
 
@@ -7,7 +7,7 @@ interface AuthResponse {
 }
 
 export const authService = {
-  async register(payload: IRegisterPayload): Promise<AuthResponse> {
+  async register(payload: IRegisterPayload): Promise<IRegisterResponse> {
     const res = await fetch(`${API}/api/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -16,7 +16,7 @@ export const authService = {
     });
     const json = await res.json();
     if (!json.success) throw new Error(json.message as string);
-    return json.data as AuthResponse;
+    return json.data as IRegisterResponse;
   },
 
   async login(payload: ILoginPayload): Promise<AuthResponse> {
@@ -43,5 +43,38 @@ export const authService = {
     const json = await res.json();
     if (!json.success) throw new Error(json.message as string);
     return (json.data as { user: IUser }).user;
+  },
+
+  async forgotPassword(payload: IForgotPasswordPayload): Promise<{ token: string }> {
+    const res = await fetch(`${API}/api/auth/forgot-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const json = await res.json();
+    if (!json.success) throw new Error(json.message as string);
+    return json.data as { token: string };
+  },
+
+  async resetPassword(payload: IResetPasswordPayload): Promise<void> {
+    const res = await fetch(`${API}/api/auth/reset-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const json = await res.json();
+    if (!json.success) throw new Error(json.message as string);
+  },
+
+  async verifyOtp(payload: IVerifyOtpPayload): Promise<AuthResponse> {
+    const res = await fetch(`${API}/api/auth/verify-otp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(payload),
+    });
+    const json = await res.json();
+    if (!json.success) throw new Error(json.message as string);
+    return json.data as AuthResponse;
   },
 };

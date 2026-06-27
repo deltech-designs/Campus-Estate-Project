@@ -29,6 +29,18 @@ export class User {
 
   @prop({ default: false })
   isDeleted!: boolean;
+
+  @prop()
+  resetPasswordToken?: string;
+
+  @prop()
+  resetPasswordExpires?: Date;
+
+  @prop()
+  otpCode?: string;
+
+  @prop()
+  otpExpires?: Date;
 }
 
 export const UserModel = getModelForClass(User);

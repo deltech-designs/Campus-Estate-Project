@@ -39,3 +39,24 @@ export interface IJwtPayload {
   iat?: number;
   exp?: number;
 }
+
+export interface IForgotPasswordPayload {
+  email: string;
+}
+
+export interface IResetPasswordPayload {
+  token: string;
+  password?: string;
+}
+
+export interface IVerifyOtpPayload {
+  email: string;
+  code: string;
+}
+
+export interface IRegisterResponse {
+  user?: IUser;
+  token?: string;
+  otpRequired?: boolean;
+  otp?: string;
+}

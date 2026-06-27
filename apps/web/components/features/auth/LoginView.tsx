@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Input } from '@/components/partials/Input';
 import { Button } from '@/components/partials/Button';
+import { Modal } from '@/components/partials/Modal';
 import { ShieldCheck, Building2, Users2, Landmark, ArrowLeft } from 'lucide-react';
 
 const schema = z.object({
@@ -25,6 +26,47 @@ export function LoginView() {
     resolver: zodResolver(schema),
   });
 
+  const [isGoogleModalOpen, setIsGoogleModalOpen] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const [showCustomInput, setShowCustomInput] = useState(false);
+  const [customGoogleEmail, setCustomGoogleEmail] = useState('');
+
+  const googleAccounts = [
+    { name: 'John Student', email: 'john.student@gmail.com', avatar: 'JS' },
+    { name: 'Dr. Sarah Lecturer', email: 's.lecturer@gmail.com', avatar: 'SL' },
+    { name: 'Alhaji Rasaq', email: 'rasaq.hostels@gmail.com', avatar: 'AR' },
+    { name: 'Benson Owner', email: 'benson.estates@gmail.com', avatar: 'BO' },
+  ];
+
+  const handleGoogleSelect = async (account: { name: string; email: string }) => {
+    setIsGoogleModalOpen(false);
+    setGoogleLoading(true);
+    setError(null);
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await login(account.email, 'GoogleOAuthPassword123!');
+      router.push('/overview');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Google OAuth Login failed');
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
+
+  const handleCustomGoogleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!customGoogleEmail || !customGoogleEmail.includes('@')) return;
+    
+    const prefix = customGoogleEmail.split('@')[0] || 'google';
+    const capitalizedName = prefix.charAt(0).toUpperCase() + prefix.slice(1);
+    
+    void handleGoogleSelect({
+      name: `${capitalizedName} Google`,
+      email: customGoogleEmail,
+    });
+  };
+
   const onSubmit = async (values: FormValues) => {
     try {
       setError(null);
@@ -38,7 +80,7 @@ export function LoginView() {
   return (
     <div className="min-h-screen bg-[var(--color-surface)] flex flex-col md:flex-row">
       {/* Left Column: Platform Branding and Stats */}
-      <div className="w-full md:w-[42%] bg-gradient-to-br from-[var(--color-sidebar-bg)] via-[var(--color-sidebar-bg)] to-indigo-950/80 p-8 md:p-12 flex flex-col justify-between text-white relative overflow-hidden border-b md:border-b-0 md:border-r border-white/5">
+      <div className="hidden md:flex md:w-[42%] bg-gradient-to-br from-[var(--color-sidebar-bg)] via-[var(--color-sidebar-bg)] to-indigo-950/80 p-8 md:p-12 flex-col justify-between text-white relative overflow-hidden border-b md:border-b-0 md:border-r border-white/5">
         {/* Subtle grid pattern overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
 
@@ -126,7 +168,14 @@ export function LoginView() {
 
         <div className="w-full max-w-md relative z-10">
           {/* Header */}
-          <div className="mb-6 flex items-center justify-between">
+          <div className="mb-6 flex flex-col gap-4">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors group self-start"
+            >
+              <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
+              Home
+            </Link>
             <div>
               <h1 className="text-2xl sm:text-3xl font-extrabold font-[var(--font-display)] text-[var(--color-text-primary)] tracking-tight">
                 Welcome back
@@ -135,13 +184,6 @@ export function LoginView() {
                 Please enter your credentials to log in to the system.
               </p>
             </div>
-            <Link
-              href="/"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors group"
-            >
-              <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
-              Home
-            </Link>
           </div>
 
           {/* Form Content Card */}
@@ -151,6 +193,39 @@ export function LoginView() {
                 {error}
               </div>
             )}
+
+            {/* Google Login */}
+            <Button
+              type="button"
+              variant="secondary"
+              loading={googleLoading}
+              onClick={() => setIsGoogleModalOpen(true)}
+              className="w-full flex items-center justify-center gap-3 py-3 mb-6 border border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-sunken)] hover:border-emerald-500/20 text-[var(--color-text-primary)] font-semibold rounded-[var(--radius-btn)] transition-all duration-150"
+            >
+              {!googleLoading && (
+                <svg className="h-5 w-5" viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                  <g transform="matrix(1, 0, 0, 1, 0, 0)">
+                    <path d="M21.35,11.1H12v2.7h5.38c-0.24,1.28 -0.99,2.37 -2.1,3.12v2.6h3.39c1.98,-1.82 3.12,-4.5 3.12,-7.58C21.79,11.66 21.63,11.23 21.35,11.1z" fill="#4285F4" />
+                    <path d="M12,21c2.43,0 4.47,-0.81 5.96,-2.18l-3.39,-2.6c-0.94,0.63 -2.14,1.0 -3.57,1.0 -2.75,0 -5.07,-1.86 -5.9,-4.35H1.61v2.69C3.1,18.52 7.23,21 12,21z" fill="#34A853" />
+                    <path d="M6.1,12.87c-0.22,-0.66 -0.35,-1.37 -0.35,-2.1c0,-0.73 0.13,-1.44 0.35,-2.1V5.98H1.61c-0.73,1.46 -1.15,3.1 -1.15,4.79s0.42,3.33 1.15,4.79l4.49,-2.69z" fill="#FBBC05" />
+                    <path d="M12,5.77c1.32,0 2.5,0.45 3.44,1.35l2.58,-2.58C16.47,3.13 14.43,2.27 12,2.27c-4.77,0 -8.9,2.48 -10.39,5.71l4.49,2.69C6.93,8.19 9.25,5.77 12,5.77z" fill="#EA4335" />
+                  </g>
+                </svg>
+              )}
+              Sign in with Google
+            </Button>
+
+            {/* Divider */}
+            <div className="relative my-6 text-center">
+              <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                <div className="w-full border-t border-[var(--color-border)]"></div>
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-[var(--color-surface-raised)] px-3 text-[var(--color-text-secondary)] font-semibold tracking-wide">
+                  Or sign in with email
+                </span>
+              </div>
+            </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" noValidate>
               <Input
@@ -180,7 +255,7 @@ export function LoginView() {
                   <span className="group-hover:text-[var(--color-text-primary)] transition-colors">Remember me</span>
                 </label>
                 <Link
-                  href="#"
+                  href="/forgot-password"
                   className="font-semibold text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] hover:underline transition-colors"
                 >
                   Forgot password?
@@ -209,6 +284,91 @@ export function LoginView() {
           </div>
         </div>
       </div>
+
+      {/* Google Mock Chooser Modal */}
+      <Modal
+        isOpen={isGoogleModalOpen}
+        onClose={() => {
+          setIsGoogleModalOpen(false);
+          setShowCustomInput(false);
+        }}
+        title="Sign in with Google"
+        size="sm"
+      >
+        <div className="flex flex-col text-center">
+          <div className="mb-4">
+            <p className="text-xs text-[var(--color-text-secondary)]">
+              Choose a Google account to continue to <span className="font-semibold text-[var(--color-text-primary)]">CampusEstate</span>
+            </p>
+          </div>
+
+          {!showCustomInput ? (
+            <div className="flex flex-col divide-y divide-[var(--color-border)] border border-[var(--color-border)] rounded-[var(--radius-card)] overflow-hidden bg-[var(--color-surface)] shadow-sm">
+              {googleAccounts.map((acc, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleGoogleSelect(acc)}
+                  className="flex items-center gap-3 p-3.5 text-left w-full hover:bg-[var(--color-surface-sunken)] transition-colors duration-150 group"
+                >
+                  <div className="w-8 h-8 rounded-full bg-emerald-500 text-white text-xs font-bold flex items-center justify-center transition-transform group-hover:scale-105 duration-150 shrink-0">
+                    {acc.avatar}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold text-[var(--color-text-primary)] truncate">{acc.name}</p>
+                    <p className="text-[10px] text-[var(--color-text-secondary)] truncate">{acc.email}</p>
+                  </div>
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="text-[10px] text-[var(--color-text-secondary)] font-medium">Click to select</span>
+                  </div>
+                </button>
+              ))}
+
+              <button
+                onClick={() => setShowCustomInput(true)}
+                className="flex items-center gap-3 p-3.5 text-left w-full hover:bg-[var(--color-surface-sunken)] transition-colors duration-150 group text-xs font-semibold text-[var(--color-text-secondary)]"
+              >
+                <div className="w-8 h-8 rounded-full border border-dashed border-[var(--color-border)] flex items-center justify-center text-lg text-[var(--color-text-secondary)] bg-[var(--color-surface-sunken)] shrink-0">
+                  +
+                </div>
+                Use another account
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={handleCustomGoogleSubmit} className="flex flex-col gap-3">
+              <Input
+                label="Google Email Address"
+                type="email"
+                required
+                placeholder="username@gmail.com"
+                value={customGoogleEmail}
+                onChange={(e) => setCustomGoogleEmail(e.target.value)}
+                className="bg-[var(--color-surface-sunken)] border-[var(--color-border)]"
+              />
+              <div className="flex gap-2 justify-end mt-2">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowCustomInput(false)}
+                >
+                  Back
+                </Button>
+                <Button
+                  type="submit"
+                  size="sm"
+                  className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-[var(--radius-btn)]"
+                >
+                  Select
+                </Button>
+              </div>
+            </form>
+          )}
+
+          <div className="mt-6 text-[10px] text-[var(--color-text-secondary)] text-left leading-relaxed border-t border-[var(--color-border)] pt-4">
+            To continue, Google will share your name, email address, profile picture and language preference with CampusEstate.
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

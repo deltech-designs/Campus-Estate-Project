@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { authService } from '@/services/auth.service';
 import { Input } from '@/components/partials/Input';
 import { Button } from '@/components/partials/Button';
 import { Modal } from '@/components/partials/Modal';
@@ -30,6 +31,13 @@ export function LandlordRegisterView() {
   const [customGoogleEmail, setCustomGoogleEmail] = useState('');
   const [showCustomInput, setShowCustomInput] = useState(false);
 
+  const [otpRequired, setOtpRequired] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState('');
+  const [otpCode, setOtpCode] = useState('');
+  const [devOtp, setDevOtp] = useState<string | null>(null);
+  const [otpVerifying, setOtpVerifying] = useState(false);
+  const [otpError, setOtpError] = useState<string | null>(null);
+
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>({
     resolver: zodResolver(schema),
   });
@@ -38,10 +46,35 @@ export function LandlordRegisterView() {
     try {
       setError(null);
       // Backend expects role 'manager' for landlords
-      await authRegister(values.firstName, values.lastName, values.email, values.password, 'manager', values.phone);
-      router.push('/overview');
+      const res = await authRegister(values.firstName, values.lastName, values.email, values.password, 'manager', values.phone);
+      if (res.otpRequired) {
+        setRegisteredEmail(values.email);
+        setDevOtp(res.otp || null);
+        setOtpRequired(true);
+      } else {
+        router.push('/overview');
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed');
+    }
+  };
+
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!otpCode || otpCode.length !== 6) {
+      setOtpError('Please enter a 6-digit OTP code');
+      return;
+    }
+
+    try {
+      setOtpError(null);
+      setOtpVerifying(true);
+      await authService.verifyOtp({ email: registeredEmail, code: otpCode });
+      window.location.href = '/overview';
+    } catch (err) {
+      setOtpError(err instanceof Error ? err.message : 'OTP Verification failed');
+    } finally {
+      setOtpVerifying(false);
     }
   };
 
@@ -84,7 +117,7 @@ export function LandlordRegisterView() {
   return (
     <div className="min-h-screen bg-[var(--color-surface)] flex flex-col md:flex-row">
       {/* Left Column: Visual Showcase */}
-      <div className="w-full md:w-[45%] bg-[var(--color-sidebar-bg)] p-8 md:p-12 flex flex-col justify-between text-white relative overflow-hidden">
+      <div className="hidden md:flex md:w-[45%] bg-[var(--color-sidebar-bg)] p-8 md:p-12 flex-col justify-between text-white relative overflow-hidden">
         {/* Decorative Glow */}
         <div className="absolute -left-20 -top-20 w-80 h-80 rounded-full bg-[var(--color-primary)]/15 blur-3xl animate-pulse-subtle" />
         <div className="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-blue-600/5 blur-3xl animate-float-delayed" />
@@ -181,101 +214,156 @@ export function LandlordRegisterView() {
               </div>
             )}
 
-            {/* Google Signup */}
-            <Button
-              type="button"
-              variant="secondary"
-              loading={googleLoading}
-              onClick={() => setIsGoogleModalOpen(true)}
-              className="w-full flex items-center justify-center gap-3 py-3 border border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-sunken)] hover:border-[var(--color-primary)]/20 text-[var(--color-text-primary)] font-semibold rounded-[var(--radius-btn)] transition-all duration-150"
-            >
-              {!googleLoading && (
-                <svg className="h-5 w-5" viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
-                  <g transform="matrix(1, 0, 0, 1, 0, 0)">
-                    <path d="M21.35,11.1H12v2.7h5.38c-0.24,1.28 -0.99,2.37 -2.1,3.12v2.6h3.39c1.98,-1.82 3.12,-4.5 3.12,-7.58C21.79,11.66 21.63,11.23 21.35,11.1z" fill="#4285F4" />
-                    <path d="M12,21c2.43,0 4.47,-0.81 5.96,-2.18l-3.39,-2.6c-0.94,0.63 -2.14,1.0 -3.57,1.0 -2.75,0 -5.07,-1.86 -5.9,-4.35H1.61v2.69C3.1,18.52 7.23,21 12,21z" fill="#34A853" />
-                    <path d="M6.1,12.87c-0.22,-0.66 -0.35,-1.37 -0.35,-2.1c0,-0.73 0.13,-1.44 0.35,-2.1V5.98H1.61c-0.73,1.46 -1.15,3.1 -1.15,4.79s0.42,3.33 1.15,4.79l4.49,-2.69z" fill="#FBBC05" />
-                    <path d="M12,5.77c1.32,0 2.5,0.45 3.44,1.35l2.58,-2.58C16.47,3.13 14.43,2.27 12,2.27c-4.77,0 -8.9,2.48 -10.39,5.71l4.49,2.69C6.93,8.19 9.25,5.77 12,5.77z" fill="#EA4335" />
-                  </g>
-                </svg>
-              )}
-              Sign up with Google
-            </Button>
+            {otpRequired ? (
+              <form onSubmit={handleVerifyOtp} className="flex flex-col gap-5">
+                <div className="text-center mb-4">
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-[var(--color-primary)]/10 text-[var(--color-primary)] mb-3">
+                    <ShieldCheck size={24} />
+                  </div>
+                  <h3 className="text-base font-bold text-[var(--color-text-primary)]">Verify your email</h3>
+                  <p className="text-xs text-[var(--color-text-secondary)] mt-1.5 leading-relaxed">
+                    We've sent a 6-digit verification code to <span className="font-semibold text-[var(--color-text-primary)]">{registeredEmail}</span>.
+                  </p>
+                </div>
 
-            {/* Divider */}
-            <div className="relative my-6 text-center">
-              <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                <div className="w-full border-t border-[var(--color-border)]"></div>
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-[var(--color-surface-raised)] px-3 text-[var(--color-text-secondary)] font-semibold tracking-wide">
-                  Or register with email
-                </span>
-              </div>
-            </div>
+                {otpError && (
+                  <div className="p-3.5 rounded-lg bg-red-50 border border-red-200 text-xs font-medium text-red-600 animate-pulse-subtle">
+                    {otpError}
+                  </div>
+                )}
 
-            {/* Standard Signup */}
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
-              <div className="grid grid-cols-2 gap-4">
                 <Input
-                  label="First name"
-                  placeholder="John"
-                  error={errors.firstName?.message}
-                  {...register('firstName')}
-                  className="bg-[var(--color-surface-sunken)] border-[var(--color-border)] focus:ring-[var(--color-primary)]/25"
+                  label="Verification Code"
+                  type="text"
+                  maxLength={6}
+                  placeholder="123456"
+                  value={otpCode}
+                  onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
+                  className="bg-[var(--color-surface-sunken)] border-[var(--color-border)] focus:ring-[var(--color-primary)]/25 py-2.5 rounded-[var(--radius-md)] text-center tracking-[0.5em] text-lg font-bold"
                 />
-                <Input
-                  label="Last name"
-                  placeholder="Doe"
-                  error={errors.lastName?.message}
-                  {...register('lastName')}
-                  className="bg-[var(--color-surface-sunken)] border-[var(--color-border)] focus:ring-[var(--color-primary)]/25"
-                />
-              </div>
-              <Input
-                label="Email"
-                type="email"
-                placeholder="john@estate.com"
-                error={errors.email?.message}
-                {...register('email')}
-                className="bg-[var(--color-surface-sunken)] border-[var(--color-border)] focus:ring-[var(--color-primary)]/25"
-              />
-              <Input
-                label="Phone number"
-                type="tel"
-                placeholder="e.g. 08012345678"
-                error={errors.phone?.message}
-                {...register('phone')}
-                className="bg-[var(--color-surface-sunken)] border-[var(--color-border)] focus:ring-[var(--color-primary)]/25"
-              />
-              <Input
-                label="Password"
-                type="password"
-                placeholder="••••••••"
-                error={errors.password?.message}
-                {...register('password')}
-                className="bg-[var(--color-surface-sunken)] border-[var(--color-border)] focus:ring-[var(--color-primary)]/25"
-              />
-              
-              <Button
-                type="submit"
-                loading={isSubmitting}
-                className="mt-2 w-full py-3 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white shadow-md shadow-primary/10 font-semibold rounded-[var(--radius-btn)]"
-              >
-                Sign Up
-              </Button>
-            </form>
 
-            {/* Redirection */}
-            <p className="text-center text-xs text-[var(--color-text-secondary)] mt-5">
-              Already have an account?{' '}
-              <Link
-                href="/login"
-                className="font-semibold text-[var(--color-primary)] hover:underline hover:text-[var(--color-primary-hover)] transition-colors"
-              >
-                Sign in
-              </Link>
-            </p>
+                <Button
+                  type="submit"
+                  loading={otpVerifying}
+                  className="mt-2 w-full py-3 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white font-semibold rounded-[var(--radius-btn)] transition-all duration-150"
+                >
+                  Verify Code
+                </Button>
+
+                <button
+                  type="button"
+                  onClick={() => setOtpRequired(false)}
+                  className="text-xs text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:underline mt-1 self-center"
+                >
+                  Back to Registration
+                </button>
+
+                {devOtp && (
+                  <div className="mt-4 p-4 rounded-xl border border-amber-200 bg-amber-50 text-amber-800 text-xs flex flex-col gap-1">
+                    <span className="font-bold uppercase tracking-wider text-[10px] text-amber-600">Development Helper</span>
+                    <p>Use code: <span className="font-bold font-mono text-sm">{devOtp}</span></p>
+                  </div>
+                )}
+              </form>
+            ) : (
+              <>
+                {/* Google Signup */}
+                <Button
+                  type="button"
+                  variant="secondary"
+                  loading={googleLoading}
+                  onClick={() => setIsGoogleModalOpen(true)}
+                  className="w-full flex items-center justify-center gap-3 py-3 border border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-sunken)] hover:border-[var(--color-primary)]/20 text-[var(--color-text-primary)] font-semibold rounded-[var(--radius-btn)] transition-all duration-150"
+                >
+                  {!googleLoading && (
+                    <svg className="h-5 w-5" viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                      <g transform="matrix(1, 0, 0, 1, 0, 0)">
+                        <path d="M21.35,11.1H12v2.7h5.38c-0.24,1.28 -0.99,2.37 -2.1,3.12v2.6h3.39c1.98,-1.82 3.12,-4.5 3.12,-7.58C21.79,11.66 21.63,11.23 21.35,11.1z" fill="#4285F4" />
+                        <path d="M12,21c2.43,0 4.47,-0.81 5.96,-2.18l-3.39,-2.6c-0.94,0.63 -2.14,1.0 -3.57,1.0 -2.75,0 -5.07,-1.86 -5.9,-4.35H1.61v2.69C3.1,18.52 7.23,21 12,21z" fill="#34A853" />
+                        <path d="M6.1,12.87c-0.22,-0.66 -0.35,-1.37 -0.35,-2.1c0,-0.73 0.13,-1.44 0.35,-2.1V5.98H1.61c-0.73,1.46 -1.15,3.1 -1.15,4.79s0.42,3.33 1.15,4.79l4.49,-2.69z" fill="#FBBC05" />
+                        <path d="M12,5.77c1.32,0 2.5,0.45 3.44,1.35l2.58,-2.58C16.47,3.13 14.43,2.27 12,2.27c-4.77,0 -8.9,2.48 -10.39,5.71l4.49,2.69C6.93,8.19 9.25,5.77 12,5.77z" fill="#EA4335" />
+                      </g>
+                    </svg>
+                  )}
+                  Sign up with Google
+                </Button>
+
+                {/* Divider */}
+                <div className="relative my-6 text-center">
+                  <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                    <div className="w-full border-t border-[var(--color-border)]"></div>
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-[var(--color-surface-raised)] px-3 text-[var(--color-text-secondary)] font-semibold tracking-wide">
+                      Or register with email
+                    </span>
+                  </div>
+                </div>
+
+                {/* Standard Signup */}
+                <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
+                  <div className="grid grid-cols-2 gap-4">
+                    <Input
+                      label="First name"
+                      placeholder="John"
+                      error={errors.firstName?.message}
+                      {...register('firstName')}
+                      className="bg-[var(--color-surface-sunken)] border-[var(--color-border)] focus:ring-[var(--color-primary)]/25"
+                    />
+                    <Input
+                      label="Last name"
+                      placeholder="Doe"
+                      error={errors.lastName?.message}
+                      {...register('lastName')}
+                      className="bg-[var(--color-surface-sunken)] border-[var(--color-border)] focus:ring-[var(--color-primary)]/25"
+                    />
+                  </div>
+                  <Input
+                    label="Email"
+                    type="email"
+                    placeholder="john@estate.com"
+                    error={errors.email?.message}
+                    {...register('email')}
+                    className="bg-[var(--color-surface-sunken)] border-[var(--color-border)] focus:ring-[var(--color-primary)]/25"
+                  />
+                  <Input
+                    label="Phone number"
+                    type="tel"
+                    placeholder="e.g. 08012345678"
+                    error={errors.phone?.message}
+                    {...register('phone')}
+                    className="bg-[var(--color-surface-sunken)] border-[var(--color-border)] focus:ring-[var(--color-primary)]/25"
+                  />
+                  <Input
+                    label="Password"
+                    type="password"
+                    placeholder="••••••••"
+                    error={errors.password?.message}
+                    {...register('password')}
+                    className="bg-[var(--color-surface-sunken)] border-[var(--color-border)] focus:ring-[var(--color-primary)]/25"
+                  />
+                  
+                  <Button
+                    type="submit"
+                    loading={isSubmitting}
+                    className="mt-2 w-full py-3 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white shadow-md shadow-primary/10 font-semibold rounded-[var(--radius-btn)]"
+                  >
+                    Sign Up
+                  </Button>
+                </form>
+
+                {/* Redirection */}
+                <p className="text-center text-xs text-[var(--color-text-secondary)] mt-5">
+                  Already have an account?{' '}
+                  <Link
+                    href="/login"
+                    className="font-semibold text-[var(--color-primary)] hover:underline hover:text-[var(--color-primary-hover)] transition-colors"
+                  >
+                    Sign in
+                  </Link>
+                </p>
+              </>
+            )}
           </div>
         </div>
       </div>

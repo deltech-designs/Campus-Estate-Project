@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import type { IUser, UserRole } from '@ems/shared';
+import type { IUser, UserRole, IRegisterResponse } from '@ems/shared';
 import { authService } from '@/services/auth.service';
 
 interface AuthContextValue {
@@ -16,7 +16,7 @@ interface AuthContextValue {
     password: string,
     role?: UserRole,
     phone?: string,
-  ) => Promise<void>;
+  ) => Promise<IRegisterResponse>;
   logout: () => Promise<void>;
 }
 
@@ -53,8 +53,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     password: string,
     role?: UserRole,
     phone?: string,
-  ): Promise<void> => {
-    const { user: registered } = await authService.register({
+  ): Promise<IRegisterResponse> => {
+    const res = await authService.register({
       firstName,
       lastName,
       email,
@@ -62,7 +62,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       role,
       phone,
     });
-    setUser(registered);
+    if (!res.otpRequired && res.user) {
+      setUser(res.user);
+    }
+    return res;
   };
 
   const logout = async (): Promise<void> => {

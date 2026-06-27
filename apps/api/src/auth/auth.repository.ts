@@ -10,6 +10,14 @@ export class UserRepository {
     return UserModel.findOne({ _id: id, isDeleted: false });
   }
 
+  async findByResetToken(token: string): Promise<DocumentType<User> | null> {
+    return UserModel.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: new Date() },
+      isDeleted: false,
+    });
+  }
+
   async create(data: Partial<User>): Promise<DocumentType<User>> {
     return UserModel.create(data);
   }
