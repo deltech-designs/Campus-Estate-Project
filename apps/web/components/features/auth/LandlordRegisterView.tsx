@@ -22,6 +22,8 @@ const schema = z.object({
 });
 type FormValues = z.infer<typeof schema>;
 
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
 export function LandlordRegisterView() {
   const { register: authRegister } = useAuth();
   const router = useRouter();
@@ -76,6 +78,11 @@ export function LandlordRegisterView() {
     } finally {
       setOtpVerifying(false);
     }
+  };
+
+  const handleGoogleSignup = () => {
+    setGoogleLoading(true);
+    window.location.href = `${API}/api/auth/google?role=manager`;
   };
 
   const googleAccounts = [
@@ -222,7 +229,7 @@ export function LandlordRegisterView() {
                   </div>
                   <h3 className="text-base font-bold text-[var(--color-text-primary)]">Verify your email</h3>
                   <p className="text-xs text-[var(--color-text-secondary)] mt-1.5 leading-relaxed">
-                    We've sent a 6-digit verification code to <span className="font-semibold text-[var(--color-text-primary)]">{registeredEmail}</span>.
+                    We&apos;ve sent a 6-digit verification code to <span className="font-semibold text-[var(--color-text-primary)]">{registeredEmail}</span>.
                   </p>
                 </div>
 
@@ -272,7 +279,7 @@ export function LandlordRegisterView() {
                   type="button"
                   variant="secondary"
                   loading={googleLoading}
-                  onClick={() => setIsGoogleModalOpen(true)}
+                  onClick={handleGoogleSignup}
                   className="w-full flex items-center justify-center gap-3 py-3 border border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-sunken)] hover:border-[var(--color-primary)]/20 text-[var(--color-text-primary)] font-semibold rounded-[var(--radius-btn)] transition-all duration-150"
                 >
                   {!googleLoading && (

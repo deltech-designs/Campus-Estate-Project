@@ -18,6 +18,8 @@ const schema = z.object({
 });
 type FormValues = z.infer<typeof schema>;
 
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
 export function LoginView() {
   const { login } = useAuth();
   const router = useRouter();
@@ -26,45 +28,11 @@ export function LoginView() {
     resolver: zodResolver(schema),
   });
 
-  const [isGoogleModalOpen, setIsGoogleModalOpen] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
-  const [showCustomInput, setShowCustomInput] = useState(false);
-  const [customGoogleEmail, setCustomGoogleEmail] = useState('');
 
-  const googleAccounts = [
-    { name: 'John Student', email: 'john.student@gmail.com', avatar: 'JS' },
-    { name: 'Dr. Sarah Lecturer', email: 's.lecturer@gmail.com', avatar: 'SL' },
-    { name: 'Alhaji Rasaq', email: 'rasaq.hostels@gmail.com', avatar: 'AR' },
-    { name: 'Benson Owner', email: 'benson.estates@gmail.com', avatar: 'BO' },
-  ];
-
-  const handleGoogleSelect = async (account: { name: string; email: string }) => {
-    setIsGoogleModalOpen(false);
+  const handleGoogleLogin = () => {
     setGoogleLoading(true);
-    setError(null);
-
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      await login(account.email, 'GoogleOAuthPassword123!');
-      router.push('/overview');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Google OAuth Login failed');
-    } finally {
-      setGoogleLoading(false);
-    }
-  };
-
-  const handleCustomGoogleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!customGoogleEmail || !customGoogleEmail.includes('@')) return;
-    
-    const prefix = customGoogleEmail.split('@')[0] || 'google';
-    const capitalizedName = prefix.charAt(0).toUpperCase() + prefix.slice(1);
-    
-    void handleGoogleSelect({
-      name: `${capitalizedName} Google`,
-      email: customGoogleEmail,
-    });
+    window.location.href = `${API}/api/auth/google?role=tenant`;
   };
 
   const onSubmit = async (values: FormValues) => {
@@ -199,7 +167,7 @@ export function LoginView() {
               type="button"
               variant="secondary"
               loading={googleLoading}
-              onClick={() => setIsGoogleModalOpen(true)}
+              onClick={handleGoogleLogin}
               className="w-full flex items-center justify-center gap-3 py-3 mb-6 border border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-sunken)] hover:border-emerald-500/20 text-[var(--color-text-primary)] font-semibold rounded-[var(--radius-btn)] transition-all duration-150"
             >
               {!googleLoading && (
@@ -285,90 +253,6 @@ export function LoginView() {
         </div>
       </div>
 
-      {/* Google Mock Chooser Modal */}
-      <Modal
-        isOpen={isGoogleModalOpen}
-        onClose={() => {
-          setIsGoogleModalOpen(false);
-          setShowCustomInput(false);
-        }}
-        title="Sign in with Google"
-        size="sm"
-      >
-        <div className="flex flex-col text-center">
-          <div className="mb-4">
-            <p className="text-xs text-[var(--color-text-secondary)]">
-              Choose a Google account to continue to <span className="font-semibold text-[var(--color-text-primary)]">CampusEstate</span>
-            </p>
-          </div>
-
-          {!showCustomInput ? (
-            <div className="flex flex-col divide-y divide-[var(--color-border)] border border-[var(--color-border)] rounded-[var(--radius-card)] overflow-hidden bg-[var(--color-surface)] shadow-sm">
-              {googleAccounts.map((acc, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleGoogleSelect(acc)}
-                  className="flex items-center gap-3 p-3.5 text-left w-full hover:bg-[var(--color-surface-sunken)] transition-colors duration-150 group"
-                >
-                  <div className="w-8 h-8 rounded-full bg-emerald-500 text-white text-xs font-bold flex items-center justify-center transition-transform group-hover:scale-105 duration-150 shrink-0">
-                    {acc.avatar}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-bold text-[var(--color-text-primary)] truncate">{acc.name}</p>
-                    <p className="text-[10px] text-[var(--color-text-secondary)] truncate">{acc.email}</p>
-                  </div>
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-[10px] text-[var(--color-text-secondary)] font-medium">Click to select</span>
-                  </div>
-                </button>
-              ))}
-
-              <button
-                onClick={() => setShowCustomInput(true)}
-                className="flex items-center gap-3 p-3.5 text-left w-full hover:bg-[var(--color-surface-sunken)] transition-colors duration-150 group text-xs font-semibold text-[var(--color-text-secondary)]"
-              >
-                <div className="w-8 h-8 rounded-full border border-dashed border-[var(--color-border)] flex items-center justify-center text-lg text-[var(--color-text-secondary)] bg-[var(--color-surface-sunken)] shrink-0">
-                  +
-                </div>
-                Use another account
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleCustomGoogleSubmit} className="flex flex-col gap-3">
-              <Input
-                label="Google Email Address"
-                type="email"
-                required
-                placeholder="username@gmail.com"
-                value={customGoogleEmail}
-                onChange={(e) => setCustomGoogleEmail(e.target.value)}
-                className="bg-[var(--color-surface-sunken)] border-[var(--color-border)]"
-              />
-              <div className="flex gap-2 justify-end mt-2">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowCustomInput(false)}
-                >
-                  Back
-                </Button>
-                <Button
-                  type="submit"
-                  size="sm"
-                  className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-[var(--radius-btn)]"
-                >
-                  Select
-                </Button>
-              </div>
-            </form>
-          )}
-
-          <div className="mt-6 text-[10px] text-[var(--color-text-secondary)] text-left leading-relaxed border-t border-[var(--color-border)] pt-4">
-            To continue, Google will share your name, email address, profile picture and language preference with CampusEstate.
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 }

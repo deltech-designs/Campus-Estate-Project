@@ -10,6 +10,8 @@ export function middleware(req: NextRequest): NextResponse {
     pathname === '/' ||
     pathname.startsWith('/login') ||
     pathname.startsWith('/register') ||
+    pathname.startsWith('/forgot-password') ||
+    pathname.startsWith('/reset-password') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
     pathname === '/favicon.ico';
@@ -21,7 +23,13 @@ export function middleware(req: NextRequest): NextResponse {
   }
 
   // Redirect authenticated users away from auth pages
-  if (token && (pathname === '/login' || pathname === '/register')) {
+  if (
+    token &&
+    (pathname === '/login' ||
+      pathname === '/register' ||
+      pathname === '/forgot-password' ||
+      pathname === '/reset-password')
+  ) {
     return NextResponse.redirect(new URL('/overview', req.url));
   }
 

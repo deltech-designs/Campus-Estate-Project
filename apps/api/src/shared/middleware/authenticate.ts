@@ -2,6 +2,15 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import type { IJwtPayload } from '@ems/shared';
 
+declare global {
+  namespace Express {
+    interface User {
+      id: string;
+      role: string;
+    }
+  }
+}
+
 export interface AuthRequest extends Request {
   user?: { id: string; role: string };
 }

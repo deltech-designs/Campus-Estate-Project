@@ -15,6 +15,8 @@ router.post('/register', validateDto(RegisterDto), asyncWrapper(ctrl.register));
 router.post('/login', validateDto(LoginDto), asyncWrapper(ctrl.login));
 router.post('/logout', authenticate, ctrl.logout);
 router.get('/me', authenticate, asyncWrapper(ctrl.getMe));
+router.get('/google', asyncWrapper(ctrl.googleLogin));
+router.get('/google/callback', asyncWrapper(ctrl.googleCallback));
 
 router.post('/forgot-password', validateDto(ForgotPasswordDto), asyncWrapper(ctrl.forgotPassword));
 router.post('/reset-password', validateDto(ResetPasswordDto), asyncWrapper(ctrl.resetPassword));

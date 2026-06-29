@@ -1,6 +1,9 @@
 import express, { Application } from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import morgan from 'morgan';
+import passport from 'passport';
+import { initPassport } from './config/passport';
 import { errorHandler } from './shared/middleware/errorHandler';
 import authRoutes from './auth/auth.routes';
 import propertyRoutes from './properties/properties.routes';
@@ -11,12 +14,48 @@ import paymentRoutes from './payments/payments.routes';
 import vendorRoutes from './vendors/vendors.routes';
 import staffRoutes from './staff/staff.routes';
 
+// Initialize Passport Strategies
+initPassport();
+
 const app: Application = express();
 
+app.use(passport.initialize());
+
 // ─── Global middleware ────────────────────────────────────────────────────────
+if (process.env['NODE_ENV'] !== 'test') {
+  app.use(morgan('dev'));
+}
+
 app.use(
   cors({
-    origin: process.env['CLIENT_ORIGIN'] ?? 'http://localhost:3000',
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, postman)
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+      
+      const allowedOrigins = [
+        process.env['CLIENT_ORIGIN'] || 'http://localhost:3000',
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+      ];
+      
+      const isAllowed = allowedOrigins.includes(origin) || 
+        (process.env['NODE_ENV'] !== 'production' && (
+          origin.startsWith('http://localhost:') || 
+          origin.startsWith('http://127.0.0.1:') || 
+          origin.startsWith('http://192.168.') ||
+          origin.startsWith('http://10.') ||
+          origin.startsWith('http://172.')
+        ));
+
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
+      }
+    },
     credentials: true,
   }),
 );
