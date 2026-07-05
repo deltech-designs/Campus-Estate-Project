@@ -59,7 +59,10 @@ export const verifyOtp = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const googleLogin = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const role = (req.query['role'] as string) || 'tenant';
+  let role = (req.query['role'] as string) || 'tenant';
+  if (role !== 'tenant' && role !== 'manager') {
+    role = 'tenant';
+  }
   const from = (req.query['from'] as string) || '/overview';
 
   const state = Buffer.from(JSON.stringify({ role, from })).toString('base64');
@@ -111,11 +114,15 @@ export const googleCallback = async (req: Request, res: Response, next: NextFunc
       let role: UserRole = 'tenant';
       try {
         const decoded = JSON.parse(Buffer.from(stateStr, 'base64').toString('utf-8'));
-        role = decoded.role as UserRole;
+        if (decoded.role === 'tenant' || decoded.role === 'manager') {
+          role = decoded.role;
+        }
       } catch (e) {
         try {
           const decoded = JSON.parse(decodeURIComponent(stateStr));
-          role = decoded.role as UserRole;
+          if (decoded.role === 'tenant' || decoded.role === 'manager') {
+            role = decoded.role;
+          }
         } catch (err) {}
       }
       const { user, token } = await service.processGoogleOAuth(code, role);

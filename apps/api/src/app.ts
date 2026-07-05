@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import morgan from 'morgan';
 import passport from 'passport';
+import helmet from 'helmet';
 import { initPassport } from './config/passport';
 import { errorHandler } from './shared/middleware/errorHandler';
 import authRoutes from './auth/auth.routes';
@@ -20,6 +21,7 @@ initPassport();
 
 const app: Application = express();
 
+app.use(helmet());
 app.use(
   session({
     secret: process.env['SESSION_SECRET'] || 'keyboard_cat',
@@ -89,29 +91,7 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/vendors', vendorRoutes);
 app.use('/api/staff', staffRoutes);
 
-// ─── Google OAuth & Session Routes ───────────────────────────────────────────
-app.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
-);
 
-app.get('/api/auth/callback/google',
-  passport.authenticate('google', { failureRedirect: '/login-failure' }),
-  (req, res) => {
-    res.redirect('/dashboard');
-  }
-);
-
-app.get('/dashboard', (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.status(401).send('Unauthorized. Please sign in.');
-  }
-  const user = req.user!;
-  res.send(`<h1>Welcome, ${user.name}</h1><p>Email: ${user.email}</p>`);
-});
-
-app.get('/login-failure', (req, res) => {
-  res.send('Something went wrong with Google authentication.');
-});
 
 // ─── Global error handler (must be last) ─────────────────────────────────────
 app.use(errorHandler);

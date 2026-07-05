@@ -5,6 +5,8 @@
   "description": "Estate Management System — pnpm + Turborepo monorepo",
   "scripts": {
     "dev": "turbo run dev --parallel",
+    "dev:web": "turbo run dev --filter=@ems/web",
+    "dev:api": "turbo run dev --filter=@ems/api",
     "build": "turbo run build",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",

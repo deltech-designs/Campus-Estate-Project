@@ -10,15 +10,17 @@ interface TopbarProps {
 }
 
 const pageTitles: Record<string, string> = {
-  '/overview':    'Overview',
-  '/properties':  'Properties',
-  '/tenants':     'Tenants',
-  '/leases':      'Leases',
-  '/maintenance': 'Maintenance',
-  '/payments':    'Payments',
-  '/vendors':     'Vendors',
-  '/staff':       'Staff',
-  '/reports':     'Reports',
+  '/overview':      'Overview',
+  '/properties':    'Properties',
+  '/tenants':       'Tenants',
+  '/leases':        'Leases',
+  '/maintenance':   'Maintenance',
+  '/payments':      'Payments',
+  '/chat':          'Chat',
+  '/notifications': 'Notifications',
+  '/vendors':       'Vendors',
+  '/staff':         'Staff',
+  '/reports':       'Reports',
 };
 
 export function Topbar({ onMenuClick }: TopbarProps) {

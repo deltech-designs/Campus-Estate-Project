@@ -215,13 +215,14 @@ export class AuthService {
 
     let user = await this.repo.findByEmail(email);
     if (!user) {
+      const finalRole = (preferredRole === 'tenant' || preferredRole === 'manager') ? preferredRole : 'tenant';
       const randomPassword = await bcrypt.hash(Math.random().toString(36).substring(2, 15), 12);
       user = await this.repo.create({
         firstName,
         lastName,
         email: email.toLowerCase(),
         password: randomPassword,
-        role: preferredRole,
+        role: finalRole,
         isActive: true,
         avatar,
       });

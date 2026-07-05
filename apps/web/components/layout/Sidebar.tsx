@@ -14,15 +14,17 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { href: '/overview',     label: 'Overview',     icon: '◉' },
-  { href: '/properties',   label: 'Properties',   icon: '🏠' },
-  { href: '/tenants',      label: 'Tenants',      icon: '👥' },
-  { href: '/leases',       label: 'Leases',       icon: '📄' },
-  { href: '/maintenance',  label: 'Maintenance',  icon: '🔧' },
-  { href: '/payments',     label: 'Payments',     icon: '💳' },
-  { href: '/vendors',      label: 'Vendors',      icon: '🏭', roles: ['admin', 'manager'] },
-  { href: '/staff',        label: 'Staff',        icon: '👔', roles: ['admin'] },
-  { href: '/reports',      label: 'Reports',      icon: '📊', roles: ['admin', 'manager'] },
+  { href: '/overview',      label: 'Overview',      icon: '◉' },
+  { href: '/properties',    label: 'Properties',    icon: '🏠' },
+  { href: '/tenants',       label: 'Tenants',       icon: '👥', roles: ['admin', 'manager'] },
+  { href: '/leases',        label: 'Leases',        icon: '📄' },
+  { href: '/maintenance',   label: 'Maintenance',   icon: '🔧' },
+  { href: '/payments',      label: 'Payments',      icon: '💳' },
+  { href: '/chat',          label: 'Chat',          icon: '💬' },
+  { href: '/notifications', label: 'Notifications', icon: '🔔' },
+  { href: '/vendors',       label: 'Vendors',       icon: '🏭', roles: ['admin', 'manager'] },
+  { href: '/staff',         label: 'Staff',         icon: '👔', roles: ['admin'] },
+  { href: '/reports',       label: 'Reports',       icon: '📊', roles: ['admin', 'manager'] },
 ];
 
 interface SidebarProps {

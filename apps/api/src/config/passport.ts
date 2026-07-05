@@ -56,14 +56,14 @@ export const initPassport = (): void => {
           if (stateStr) {
             try {
               const decoded = JSON.parse(Buffer.from(stateStr, 'base64').toString('utf-8'));
-              if (decoded.role) {
-                role = decoded.role as UserRole;
+              if (decoded.role === 'tenant' || decoded.role === 'manager') {
+                role = decoded.role;
               }
             } catch (e) {
               try {
                 const decoded = JSON.parse(decodeURIComponent(stateStr));
-                if (decoded.role) {
-                  role = decoded.role as UserRole;
+                if (decoded.role === 'tenant' || decoded.role === 'manager') {
+                  role = decoded.role;
                 }
               } catch (err) {
                 console.error('Failed to parse state in Google Strategy callback:', err);
