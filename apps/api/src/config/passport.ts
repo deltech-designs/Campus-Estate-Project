@@ -5,17 +5,35 @@ import bcrypt from 'bcryptjs';
 import type { UserRole } from '@ems/shared';
 import type { Request } from 'express';
 
+declare global {
+  namespace Express {
+    interface User {
+      email?: string;
+      name?: string;
+      role: UserRole;
+      id: string;
+      avatar?: string;
+    }
+  }
+}
+
 const repo = new UserRepository();
 
 export const initPassport = (): void => {
   const clientId = process.env['GOOGLE_CLIENT_ID'];
   const clientSecret = process.env['GOOGLE_CLIENT_SECRET'];
-  const callbackUrl = process.env['GOOGLE_CALLBACK_URL'] || 'http://localhost:5000/api/auth/google/callback';
+  const callbackUrl =
+    process.env['GOOGLE_CALLBACK_URL'] ||
+    `${process.env['API_BASE_URL']}/api/auth/google/callback`;
 
   if (!clientId || !clientSecret) {
     console.log('[PASSPORT] Google Client ID or Secret missing. GoogleStrategy not registered.');
     return;
   }
+
+  // Passport Serialization
+  passport.serializeUser((user: Express.User, done) => done(null, user));
+  passport.deserializeUser((user: Express.User, done) => done(null, user));
 
   passport.use(
     new GoogleStrategy(
@@ -35,16 +53,25 @@ export const initPassport = (): void => {
           // Retrieve state to determine dynamic preferredRole (e.g. tenant or manager)
           const stateStr = req.query['state'] as string;
           let role: UserRole = 'tenant';
-          try {
-            if (stateStr) {
+          if (stateStr) {
+            try {
               const decoded = JSON.parse(Buffer.from(stateStr, 'base64').toString('utf-8'));
               if (decoded.role) {
                 role = decoded.role as UserRole;
               }
+            } catch (e) {
+              try {
+                const decoded = JSON.parse(decodeURIComponent(stateStr));
+                if (decoded.role) {
+                  role = decoded.role as UserRole;
+                }
+              } catch (err) {
+                console.error('Failed to parse state in Google Strategy callback:', err);
+              }
             }
-          } catch (e) {
-            console.error('Failed to parse state in Google Strategy callback:', e);
           }
+
+          const avatar = profile.photos?.[0]?.value;
 
           let user = await repo.findByEmail(email);
           if (!user) {
@@ -59,10 +86,22 @@ export const initPassport = (): void => {
               password: randomPassword,
               role,
               isActive: true,
+              avatar,
             });
+          } else if (avatar && !user.avatar) {
+            user.avatar = avatar;
+            await user.save();
           }
 
-          return done(null, user as unknown as Express.User);
+          const formattedUser: Express.User = {
+            id: String(user._id),
+            role: user.role,
+            email: user.email,
+            name: `${user.firstName} ${user.lastName}`,
+            avatar: user.avatar,
+          };
+
+          return done(null, formattedUser);
         } catch (err) {
           return done(err as Error);
         }
@@ -70,3 +109,4 @@ export const initPassport = (): void => {
     )
   );
 };
+

@@ -1,18 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import type { IJwtPayload } from '@ems/shared';
+import type { IJwtPayload, UserRole } from '@ems/shared';
 
 declare global {
   namespace Express {
     interface User {
       id: string;
-      role: string;
+      role: UserRole;
     }
   }
 }
 
 export interface AuthRequest extends Request {
-  user?: { id: string; role: string };
+  user?: { id: string; role: UserRole };
 }
 
 export const authenticate = (

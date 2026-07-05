@@ -1,4 +1,5 @@
 import express, { Application } from 'express';
+import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -19,7 +20,17 @@ initPassport();
 
 const app: Application = express();
 
+app.use(
+  session({
+    secret: process.env['SESSION_SECRET'] || 'keyboard_cat',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: process.env['NODE_ENV'] === 'production' },
+  }),
+);
+
 app.use(passport.initialize());
+app.use(passport.session());
 
 // ─── Global middleware ────────────────────────────────────────────────────────
 if (process.env['NODE_ENV'] !== 'test') {
@@ -77,6 +88,30 @@ app.use('/api/maintenance', maintenanceRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/vendors', vendorRoutes);
 app.use('/api/staff', staffRoutes);
+
+// ─── Google OAuth & Session Routes ───────────────────────────────────────────
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+app.get('/api/auth/callback/google',
+  passport.authenticate('google', { failureRedirect: '/login-failure' }),
+  (req, res) => {
+    res.redirect('/dashboard');
+  }
+);
+
+app.get('/dashboard', (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).send('Unauthorized. Please sign in.');
+  }
+  const user = req.user!;
+  res.send(`<h1>Welcome, ${user.name}</h1><p>Email: ${user.email}</p>`);
+});
+
+app.get('/login-failure', (req, res) => {
+  res.send('Something went wrong with Google authentication.');
+});
 
 // ─── Global error handler (must be last) ─────────────────────────────────────
 app.use(errorHandler);

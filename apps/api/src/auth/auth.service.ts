@@ -153,6 +153,7 @@ export class AuthService {
     let email = 'google-oauth-user@example.com';
     let firstName = 'Google';
     let lastName = 'User';
+    let avatar: string | undefined = undefined;
 
     const isMock = !clientId || !clientSecret || code === 'mock_code' || code.startsWith('mock_');
 
@@ -185,10 +186,17 @@ export class AuthService {
           throw new Error('Failed to fetch user info from Google');
         }
 
-        const profile = await userResponse.json() as { email: string; given_name?: string; family_name?: string; name?: string };
+        const profile = await userResponse.json() as {
+          email: string;
+          given_name?: string;
+          family_name?: string;
+          name?: string;
+          picture?: string;
+        };
         email = profile.email;
         firstName = profile.given_name || profile.name?.split(' ')[0] || 'Google';
         lastName = profile.family_name || profile.name?.split(' ')[1] || 'User';
+        avatar = profile.picture;
       } catch (err) {
         console.error('Google OAuth error:', err);
         const message = err instanceof Error ? err.message : 'Google OAuth failed';
@@ -215,7 +223,11 @@ export class AuthService {
         password: randomPassword,
         role: preferredRole,
         isActive: true,
+        avatar,
       });
+    } else if (avatar && !user.avatar) {
+      user.avatar = avatar;
+      await user.save();
     }
 
     const token = this.signToken(user);
@@ -238,6 +250,7 @@ export class AuthService {
       role: user.role,
       phone: user.phone,
       isActive: user.isActive,
+      avatar: user.avatar,
       createdAt: (user as unknown as { createdAt: Date }).createdAt?.toISOString() ?? '',
       updatedAt: (user as unknown as { updatedAt: Date }).updatedAt?.toISOString() ?? '',
     };

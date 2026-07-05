@@ -10,6 +10,7 @@ export interface IUser {
   role: UserRole;
   phone?: string;
   isActive: boolean;
+  avatar?: string;
   createdAt: string;
   updatedAt: string;
 }

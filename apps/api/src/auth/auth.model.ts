@@ -24,6 +24,9 @@ export class User {
   @prop({ trim: true })
   phone?: string;
 
+  @prop({ trim: true })
+  avatar?: string;
+
   @prop({ default: true })
   isActive!: boolean;
 
