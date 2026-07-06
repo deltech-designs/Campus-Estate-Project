@@ -13,6 +13,7 @@ export interface IProperty {
   bedrooms: number;
   estateZone: string;
   amenities: string[];
+  landlordId?: any;
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
@@ -26,6 +27,7 @@ export interface ICreatePropertyPayload {
   bedrooms: number;
   estateZone: string;
   amenities?: string[];
+  landlordId?: string;
 }
 
 export type IUpdatePropertyPayload = Partial<ICreatePropertyPayload>;

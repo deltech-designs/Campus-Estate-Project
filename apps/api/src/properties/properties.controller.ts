@@ -1,30 +1,41 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { AuthRequest } from '../shared/middleware/authenticate';
 import { PropertyService } from './properties.service';
 import { sendSuccess } from '../shared/utils/response';
 
 const service = new PropertyService();
 
-export const getAllProperties = async (req: Request, res: Response): Promise<void> => {
-  const data = await service.getAllProperties();
+export const getAllProperties = async (req: AuthRequest, res: Response): Promise<void> => {
+  const role = req.user?.role;
+  const userId = req.user?.id;
+  const data = await service.getAllProperties(role, userId);
   sendSuccess(res, data, 'Properties fetched');
 };
 
-export const getPropertyById = async (req: Request, res: Response): Promise<void> => {
+export const getPropertyById = async (req: AuthRequest, res: Response): Promise<void> => {
   const data = await service.getPropertyById(req.params['id'] as string);
   sendSuccess(res, data, 'Property fetched');
 };
 
-export const createProperty = async (req: Request, res: Response): Promise<void> => {
-  const data = await service.createProperty(req.body);
+export const createProperty = async (req: AuthRequest, res: Response): Promise<void> => {
+  const payload = { ...req.body };
+  if (req.user) {
+    if (req.user.role === 'manager') {
+      payload.landlordId = req.user.id;
+    } else if (req.user.role === 'admin' && !payload.landlordId) {
+      payload.landlordId = req.user.id;
+    }
+  }
+  const data = await service.createProperty(payload);
   sendSuccess(res, data, 'Property created', 201);
 };
 
-export const updateProperty = async (req: Request, res: Response): Promise<void> => {
+export const updateProperty = async (req: AuthRequest, res: Response): Promise<void> => {
   const data = await service.updateProperty(req.params['id'] as string, req.body);
   sendSuccess(res, data, 'Property updated');
 };
 
-export const deleteProperty = async (req: Request, res: Response): Promise<void> => {
+export const deleteProperty = async (req: AuthRequest, res: Response): Promise<void> => {
   await service.deleteProperty(req.params['id'] as string);
   sendSuccess(res, null, 'Property deleted');
 };

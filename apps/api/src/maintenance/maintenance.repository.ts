@@ -2,8 +2,8 @@ import { MaintenanceModel, MaintenanceRequest } from './maintenance.model';
 import type { DocumentType } from '@typegoose/typegoose';
 
 export class MaintenanceRepository {
-  async findAll(): Promise<DocumentType<MaintenanceRequest>[]> {
-    return MaintenanceModel.find({ isDeleted: false });
+  async findAll(filter: Record<string, unknown> = {}): Promise<DocumentType<MaintenanceRequest>[]> {
+    return MaintenanceModel.find({ ...filter, isDeleted: false });
   }
 
   async findById(id: string): Promise<DocumentType<MaintenanceRequest> | null> {

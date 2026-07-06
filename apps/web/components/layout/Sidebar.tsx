@@ -20,6 +20,7 @@ import {
   LogOut,
   Home,
   UserCircle,
+  Settings,
 } from 'lucide-react';
 
 interface NavItem {
@@ -42,6 +43,7 @@ const navItems: NavItem[] = [
   { href: '/vendors',       label: 'Vendors',       icon: HardHat,         roles: ['admin', 'manager'] },
   { href: '/staff',         label: 'Staff',         icon: UserCog,         roles: ['admin'] },
   { href: '/reports',       label: 'Reports',       icon: BarChart3,       roles: ['admin', 'manager'] },
+  { href: '/settings',      label: 'Settings',      icon: Settings,        roles: ['admin'] },
   // ── Tenant-only ───────────────────────────────────────────────────────────
   { href: '/my-lease',      label: 'My Lease',      icon: Home,            roles: ['tenant'] },
   { href: '/profile',       label: 'Profile',       icon: UserCircle,      roles: ['tenant'] },
@@ -97,6 +99,41 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         }
         if (item.href === '/profile') {
           return { ...item, href: '/manager/profile' };
+        }
+      }
+      if (user?.role === 'admin') {
+        if (item.href === '/overview') {
+          return { ...item, href: '/admin/overview' };
+        }
+        if (item.href === '/properties') {
+          return { ...item, href: '/admin/properties' };
+        }
+        if (item.href === '/tenants') {
+          return { ...item, href: '/admin/tenants' };
+        }
+        if (item.href === '/leases') {
+          return { ...item, href: '/admin/leases' };
+        }
+        if (item.href === '/maintenance') {
+          return { ...item, href: '/admin/maintenance' };
+        }
+        if (item.href === '/payments') {
+          return { ...item, href: '/admin/payments' };
+        }
+        if (item.href === '/notifications') {
+          return { ...item, href: '/admin/notifications' };
+        }
+        if (item.href === '/vendors') {
+          return { ...item, href: '/admin/vendors' };
+        }
+        if (item.href === '/staff') {
+          return { ...item, href: '/admin/staff' };
+        }
+        if (item.href === '/reports') {
+          return { ...item, href: '/admin/reports' };
+        }
+        if (item.href === '/settings') {
+          return { ...item, href: '/admin/settings' };
         }
       }
       return item;

@@ -3,11 +3,29 @@ import { CreateMaintenanceDto } from './dtos/create-maintenance.dto';
 import { UpdateMaintenanceDto } from './dtos/update-maintenance.dto';
 import type { DocumentType } from '@typegoose/typegoose';
 import type { MaintenanceRequest } from './maintenance.model';
+import { PropertyRepository } from '../properties/properties.repository';
+import { UserModel } from '../auth/auth.model';
+import { TenantModel } from '../tenants/tenants.model';
 
 export class MaintenanceService {
   private repo = new MaintenanceRepository();
+  private propertyRepo = new PropertyRepository();
 
-  async getAll(): Promise<DocumentType<MaintenanceRequest>[]> { return this.repo.findAll(); }
+  async getAll(role?: string, userId?: string): Promise<DocumentType<MaintenanceRequest>[]> {
+    if (role === 'tenant') {
+      const user = await UserModel.findById(userId);
+      if (!user) return [];
+      const tenant = await TenantModel.findOne({ email: user.email, isDeleted: false });
+      if (!tenant) return [];
+      return this.repo.findAll({ tenantId: tenant._id });
+    }
+    if (role === 'manager') {
+      const properties = await this.propertyRepo.findAll({ landlordId: userId });
+      const propertyIds = properties.map(p => p._id);
+      return this.repo.findAll({ propertyId: { $in: propertyIds } });
+    }
+    return this.repo.findAll();
+  }
 
   async getById(id: string): Promise<DocumentType<MaintenanceRequest>> {
     const item = await this.repo.findById(id);

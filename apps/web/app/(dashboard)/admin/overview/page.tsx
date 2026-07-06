@@ -1,5 +1,5 @@
 import { OverviewView } from '@/components/features/overview/OverviewView';
 
-export default function ManagerOverviewPage() {
+export default function AdminOverviewPage() {
   return <OverviewView />;
 }

@@ -2,7 +2,7 @@ import { PaymentModel, Payment } from './payments.model';
 import type { DocumentType } from '@typegoose/typegoose';
 
 export class PaymentRepository {
-  async findAll(): Promise<DocumentType<Payment>[]> { return PaymentModel.find({ isDeleted: false }); }
+  async findAll(filter: Record<string, unknown> = {}): Promise<DocumentType<Payment>[]> { return PaymentModel.find({ ...filter, isDeleted: false }); }
   async findById(id: string): Promise<DocumentType<Payment> | null> { return PaymentModel.findOne({ _id: id, isDeleted: false }); }
   async findByTenant(tenantId: string): Promise<DocumentType<Payment>[]> { return PaymentModel.find({ tenantId, isDeleted: false }); }
   async create(data: Partial<Payment>): Promise<DocumentType<Payment>> { return PaymentModel.create(data); }

@@ -3,10 +3,29 @@ import { CreatePaymentDto } from './dtos/create-payment.dto';
 import { UpdatePaymentDto } from './dtos/update-payment.dto';
 import type { DocumentType } from '@typegoose/typegoose';
 import type { Payment } from './payments.model';
+import { PropertyRepository } from '../properties/properties.repository';
+import { UserModel } from '../auth/auth.model';
+import { TenantModel } from '../tenants/tenants.model';
 
 export class PaymentService {
   private repo = new PaymentRepository();
-  async getAll(): Promise<DocumentType<Payment>[]> { return this.repo.findAll(); }
+  private propertyRepo = new PropertyRepository();
+
+  async getAll(role?: string, userId?: string): Promise<DocumentType<Payment>[]> {
+    if (role === 'tenant') {
+      const user = await UserModel.findById(userId);
+      if (!user) return [];
+      const tenant = await TenantModel.findOne({ email: user.email, isDeleted: false });
+      if (!tenant) return [];
+      return this.repo.findAll({ tenantId: tenant._id });
+    }
+    if (role === 'manager') {
+      const properties = await this.propertyRepo.findAll({ landlordId: userId });
+      const propertyIds = properties.map(p => p._id);
+      return this.repo.findAll({ propertyId: { $in: propertyIds } });
+    }
+    return this.repo.findAll();
+  }
   async getById(id: string): Promise<DocumentType<Payment>> {
     const p = await this.repo.findById(id);
     if (!p) throw { status: 404, message: 'Payment not found', code: 'NOT_FOUND' };

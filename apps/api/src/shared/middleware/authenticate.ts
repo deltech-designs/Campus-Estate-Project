@@ -43,3 +43,25 @@ export const authenticate = (
       .json({ success: false, message: 'Invalid or expired token', code: 'INVALID_TOKEN' });
   }
 };
+
+export const optionalAuthenticate = (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): void => {
+  const token = req.cookies?.ems_token as string | undefined;
+
+  if (token) {
+    try {
+      const payload = jwt.verify(
+        token,
+        process.env['JWT_SECRET'] as string,
+      ) as IJwtPayload;
+
+      req.user = { id: payload.id, role: payload.role };
+    } catch {
+      // Ignore invalid token and proceed anonymously
+    }
+  }
+  next();
+};

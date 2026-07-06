@@ -7,8 +7,9 @@ import type { Property } from './properties.model';
 export class PropertyService {
   private repo = new PropertyRepository();
 
-  async getAllProperties(): Promise<DocumentType<Property>[]> {
-    return this.repo.findAll();
+  async getAllProperties(role?: string, userId?: string): Promise<DocumentType<Property>[]> {
+    const filter = role === 'manager' ? { landlordId: userId } : {};
+    return this.repo.findAll(filter);
   }
 
   async getPropertyById(id: string): Promise<DocumentType<Property>> {

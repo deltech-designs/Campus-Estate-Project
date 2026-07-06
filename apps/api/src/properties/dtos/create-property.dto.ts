@@ -37,4 +37,8 @@ export class CreatePropertyDto {
   @IsString({ each: true })
   @IsOptional()
   amenities?: string[];
+
+  @IsString()
+  @IsOptional()
+  landlordId?: string;
 }

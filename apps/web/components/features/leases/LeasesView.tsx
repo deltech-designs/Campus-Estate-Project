@@ -34,8 +34,8 @@ export function LeasesView() {
           <tbody className="divide-y divide-[var(--color-border)]">
             {leases.map(l => (
               <tr key={l._id} className="hover:bg-[var(--color-surface-sunken)] transition-colors">
-                <td className="px-4 py-3 font-medium">{l.propertyId}</td>
-                <td className="px-4 py-3 text-[var(--color-muted)]">{l.tenantId}</td>
+                <td className="px-4 py-3 font-medium">{l.propertyId && typeof l.propertyId === 'object' && 'title' in l.propertyId ? (l.propertyId as any).title : String(l.propertyId)}</td>
+                <td className="px-4 py-3 text-[var(--color-muted)]">{l.tenantId && typeof l.tenantId === 'object' && 'firstName' in l.tenantId ? `${(l.tenantId as any).firstName} ${(l.tenantId as any).lastName}` : String(l.tenantId)}</td>
                 <td className="px-4 py-3 text-[var(--color-muted)]">{formatDate(l.startDate)}</td>
                 <td className="px-4 py-3 text-[var(--color-muted)]">{formatDate(l.endDate)}</td>
                 <td className="px-4 py-3 font-medium">{formatCurrency(l.monthlyRent)}</td>

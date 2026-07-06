@@ -1,4 +1,4 @@
-import { prop, modelOptions, Severity, getModelForClass } from '@typegoose/typegoose';
+import { prop, modelOptions, Severity, getModelForClass, Ref } from '@typegoose/typegoose';
 import type { PropertyType, PropertyStatus } from '@ems/shared';
 
 @modelOptions({
@@ -34,6 +34,9 @@ export class Property {
 
   @prop({ type: () => [String], default: [] })
   amenities!: string[];
+
+  @prop({ ref: () => 'User' })
+  landlordId?: Ref<any>;
 
   @prop({ default: false })
   isDeleted!: boolean;

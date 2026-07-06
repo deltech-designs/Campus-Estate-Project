@@ -24,7 +24,7 @@ export function LoginView() {
   const { login } = useAuth();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormValues>({
+  const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm<FormValues>({
     resolver: zodResolver(schema),
   });
 
@@ -257,6 +257,29 @@ export function LoginView() {
                 Register here
               </Link>
             </p>
+
+            {/* Quick Demo Credentials helper */}
+            <div className="mt-6 p-4 rounded-xl bg-indigo-50/50 border border-indigo-100/50 dark:bg-indigo-950/20 dark:border-indigo-900/30 text-xs">
+              <p className="font-semibold text-indigo-950 dark:text-indigo-200 mb-2 flex items-center gap-1.5">
+                <ShieldCheck size={14} className="text-indigo-600 dark:text-indigo-400" />
+                Demo Credentials (Admin Seeded)
+              </p>
+              <div className="flex justify-between items-center gap-2">
+                <code className="bg-white/80 dark:bg-black/20 px-2 py-1 rounded border border-indigo-100 dark:border-indigo-950 font-mono text-[10px] text-indigo-900 dark:text-indigo-300">
+                  admin@estate.com / AdminPassword123!
+                </code>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setValue('email', 'admin@estate.com');
+                    setValue('password', 'AdminPassword123!');
+                  }}
+                  className="text-xs font-bold text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors uppercase tracking-wider cursor-pointer"
+                >
+                  Autofill
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

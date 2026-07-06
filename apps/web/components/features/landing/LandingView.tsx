@@ -150,11 +150,10 @@ const MOCK_PROPERTIES: IEnhancedProperty[] = [
 export function LandingView() {
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
-  // Fetch live properties from backend database if authenticated
+  // Fetch live properties from backend database (publicly accessible)
   const { data: liveProperties } = useQuery({
     queryKey: ['properties'],
     queryFn: propertiesService.getAll,
-    enabled: isAuthenticated,
     retry: false,
   });
 
@@ -183,7 +182,9 @@ export function LandingView() {
       description: `A beautifully situated ${p.type} in the ${p.estateZone} district. Features verified amenities, proximity indicators, and smart contract setup. Contact landlord directly inside the dashboard.`,
       distanceToCampus: 'Short walk from Campus Gates',
       walkMinutes: 8,
-      landlordName: 'Verified EMS Owner',
+      landlordName: p.landlordId && typeof p.landlordId === 'object' && 'firstName' in p.landlordId
+        ? `${p.landlordId.firstName} ${p.landlordId.lastName}`
+        : 'Verified EMS Owner',
       landlordRating: 4.8,
       landlordResponse: 'Under 30 minutes',
       isPopular: false,

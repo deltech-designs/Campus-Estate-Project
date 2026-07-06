@@ -3,11 +3,11 @@ import type { DocumentType } from '@typegoose/typegoose';
 
 export class PropertyRepository {
   async findAll(filter: Record<string, unknown> = {}): Promise<DocumentType<Property>[]> {
-    return PropertyModel.find({ ...filter, isDeleted: false });
+    return PropertyModel.find({ ...filter, isDeleted: false }).populate('landlordId', 'firstName lastName email phone');
   }
 
   async findById(id: string): Promise<DocumentType<Property> | null> {
-    return PropertyModel.findOne({ _id: id, isDeleted: false });
+    return PropertyModel.findOne({ _id: id, isDeleted: false }).populate('landlordId', 'firstName lastName email phone');
   }
 
   async create(data: Partial<Property>): Promise<DocumentType<Property>> {
@@ -15,7 +15,7 @@ export class PropertyRepository {
   }
 
   async update(id: string, data: Partial<Property>): Promise<DocumentType<Property> | null> {
-    return PropertyModel.findByIdAndUpdate(id, { $set: data }, { new: true });
+    return PropertyModel.findByIdAndUpdate(id, { $set: data }, { new: true }).populate('landlordId', 'firstName lastName email phone');
   }
 
   async softDelete(id: string): Promise<void> {
