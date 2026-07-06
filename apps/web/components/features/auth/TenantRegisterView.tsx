@@ -53,7 +53,7 @@ export function TenantRegisterView() {
         setDevOtp(res.otp || null);
         setOtpRequired(true);
       } else {
-        router.push('/overview');
+        router.push('/tenants');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed');
@@ -71,7 +71,7 @@ export function TenantRegisterView() {
       setOtpError(null);
       setOtpVerifying(true);
       await authService.verifyOtp({ email: registeredEmail, code: otpCode });
-      window.location.href = '/overview';
+      window.location.href = '/tenants';
     } catch (err) {
       setOtpError(err instanceof Error ? err.message : 'OTP Verification failed');
     } finally {
@@ -99,7 +99,7 @@ export function TenantRegisterView() {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1500));
       await authRegister(firstName, lastName, account.email, 'GoogleOAuthPassword123!', 'tenant');
-      router.push('/overview');
+      router.push('/tenants');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Google OAuth Registration failed');
     } finally {
