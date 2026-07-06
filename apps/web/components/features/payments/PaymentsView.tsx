@@ -99,7 +99,7 @@ export function PaymentsView() {
     return (
       <div className="space-y-6">
         {/* Balance Card */}
-        <div className="bg-white rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+        <div className="bg-[var(--color-surface-raised)] rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6 hover:shadow-md hover:border-[var(--color-primary)]/10 transition-all duration-300">
           <div className="space-y-1">
             <p className="text-sm font-medium text-[var(--color-muted)]">Total Outstanding Balance</p>
             <p className="text-3xl font-bold font-[var(--font-display)] text-[var(--color-foreground)]">
@@ -121,7 +121,7 @@ export function PaymentsView() {
         {/* History Table */}
         <div className="space-y-4">
           <h3 className="text-base font-bold font-[var(--font-display)] text-[var(--color-foreground)]">Payment Transactions</h3>
-          <div className="bg-white rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] overflow-hidden">
+          <div className="bg-[var(--color-surface-raised)] rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] overflow-hidden">
             <table className="w-full text-sm">
               <thead className="bg-[var(--color-surface-sunken)] border-b border-[var(--color-border)]">
                 <tr>
@@ -228,7 +228,7 @@ export function PaymentsView() {
                   value={pinCode}
                   onChange={(e) => setPinCode(e.target.value.replace(/\D/g, ''))}
                   placeholder="••••"
-                  className="w-full px-3 py-2 text-center text-lg font-mono tracking-widest rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                  className="w-full px-3 py-2 text-center text-lg font-mono tracking-widest rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface-sunken)] text-[var(--color-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)] transition-colors"
                 />
               </div>
 
@@ -322,11 +322,11 @@ export function PaymentsView() {
     <div className="space-y-6">
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="bg-white rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] p-5">
+        <div className="bg-[var(--color-surface-raised)] rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] p-5 hover:shadow-md hover:border-[var(--color-primary)]/10 transition-all duration-300">
           <p className="text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider mb-2">Total Rent Collected</p>
           <p className="text-2xl font-bold text-emerald-600">₦{totalCollected.toLocaleString()}</p>
         </div>
-        <div className="bg-white rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] p-5">
+        <div className="bg-[var(--color-surface-raised)] rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] p-5 hover:shadow-md hover:border-[var(--color-primary)]/10 transition-all duration-300">
           <p className="text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wider mb-2">Pending Invoices Amount</p>
           <p className="text-2xl font-bold text-amber-600">₦{totalPending.toLocaleString()}</p>
         </div>
@@ -335,7 +335,7 @@ export function PaymentsView() {
       {/* Global Invoices Table */}
       <div className="space-y-4">
         <h3 className="text-base font-bold font-[var(--font-display)] text-[var(--color-foreground)]">Billing & Rent Invoices</h3>
-        <div className="bg-white rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] overflow-hidden">
+        <div className="bg-[var(--color-surface-raised)] rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-[var(--color-surface-sunken)] border-b border-[var(--color-border)]">
               <tr>

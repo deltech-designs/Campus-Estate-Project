@@ -8,7 +8,7 @@ interface AuthContextValue {
   user: IUser | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<IUser>;
   register: (
     firstName: string,
     lastName: string,
@@ -41,9 +41,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     void fetchMe();
   }, [fetchMe]);
 
-  const login = async (email: string, password: string): Promise<void> => {
+  const login = async (email: string, password: string): Promise<IUser> => {
     const { user: loggedIn } = await authService.login({ email, password });
     setUser(loggedIn);
+    return loggedIn;
   };
 
   const register = async (

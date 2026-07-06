@@ -191,7 +191,7 @@ export function MaintenanceView() {
       {requestList.length === 0 ? (
         <EmptyState title="No maintenance requests" description="No logged faults or requests found." icon="🔧" />
       ) : (
-        <div className="bg-white rounded-[var(--radius-card)] border border-[var(--color-border)] shadow-[var(--shadow-card)] overflow-hidden">
+        <div className="bg-[var(--color-surface-raised)] rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-[var(--color-surface-sunken)] border-b border-[var(--color-border)]">
               <tr>
@@ -238,7 +238,7 @@ export function MaintenanceView() {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="text-sm font-medium text-[var(--color-foreground)] mb-1 block">Fault Category</label>
-              <select className="w-full px-3 py-2 text-sm rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+              <select className="w-full px-3 py-2 text-sm rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface-sunken)] text-[var(--color-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)] transition-colors">
                 <option value="plumbing">Plumbing</option>
                 <option value="electrical">Electrical</option>
                 <option value="structural">Structural/Masonry</option>
@@ -250,7 +250,7 @@ export function MaintenanceView() {
               <label className="text-sm font-medium text-[var(--color-foreground)] mb-1 block">Priority Urgency</label>
               <select
                 {...register('priority')}
-                className="w-full px-3 py-2 text-sm rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                className="w-full px-3 py-2 text-sm rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface-sunken)] text-[var(--color-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)] transition-colors"
               >
                 <option value="low">Low (General Query)</option>
                 <option value="medium">Medium (Repair Needed)</option>
@@ -266,7 +266,7 @@ export function MaintenanceView() {
               {...register('description')}
               rows={3}
               placeholder="Provide context, location details, or specific symptoms..."
-              className="w-full px-3 py-2 text-sm rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+              className="w-full px-3 py-2 text-sm rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface-sunken)] text-[var(--color-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)] transition-colors"
             />
             {errors.description?.message && <p className="text-xs text-[var(--color-danger)]">{errors.description.message}</p>}
           </div>
@@ -294,7 +294,7 @@ export function MaintenanceView() {
             <div className="bg-[var(--color-surface-sunken)] p-4 rounded-lg">
               <h3 className="font-bold text-sm text-[var(--color-foreground)] mb-1">{activeRequest.title}</h3>
               <p className="text-xs text-[var(--color-muted)] mb-3">Report Ref: #{activeRequest._id.toUpperCase()} • Priority: {activeRequest.priority.toUpperCase()}</p>
-              <p className="text-sm text-[var(--color-foreground)] leading-relaxed bg-white p-3 rounded border border-[var(--color-border)]">{activeRequest.description}</p>
+              <p className="text-sm text-[var(--color-foreground)] leading-relaxed bg-[var(--color-surface-sunken)] p-3 rounded border border-[var(--color-border)]">{activeRequest.description}</p>
             </div>
 
             {/* Step Wizard Progress tracker */}
@@ -349,7 +349,7 @@ export function MaintenanceView() {
                       <select
                         value={selectedVendor}
                         onChange={(e) => setSelectedVendor(e.target.value)}
-                        className="w-full px-3 py-2 text-sm rounded border border-blue-200 bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                        className="w-full px-3 py-2 text-sm rounded-[var(--radius-md)] border border-blue-200 bg-[var(--color-surface-raised)] text-[var(--color-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
                       >
                         <option value="">-- Choose Vendor --</option>
                         {vendors?.map((v) => (

@@ -128,7 +128,7 @@ export function PropertiesView() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Main Card */}
-          <div className="md:col-span-2 bg-white rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] overflow-hidden">
+          <div className="md:col-span-2 bg-[var(--color-surface-raised)] rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] overflow-hidden hover:shadow-md hover:border-[var(--color-primary)]/10 transition-all duration-300">
             {/* Header image mock */}
             <div className="h-48 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-sidebar-hover)] flex items-center justify-center text-white relative">
               <div className="absolute top-4 right-4">
@@ -174,7 +174,7 @@ export function PropertiesView() {
           </div>
 
           {/* Landlord Contact Info */}
-          <div className="bg-white rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] p-6 space-y-6 flex flex-col justify-between">
+          <div className="bg-[var(--color-surface-raised)] rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] p-6 space-y-6 flex flex-col justify-between hover:shadow-md hover:border-[var(--color-primary)]/10 transition-all duration-300">
             <div className="space-y-4">
               <h3 className="text-sm font-bold text-[var(--color-foreground)] font-[var(--font-display)]">Estate Contact Details</h3>
               <div className="flex items-center gap-3">
@@ -237,7 +237,7 @@ export function PropertiesView() {
       {properties.length === 0 ? (
         <EmptyState title="No properties yet" description="Add your first property unit to get started." icon="🏠" />
       ) : (
-        <div className="bg-white rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] overflow-hidden">
+        <div className="bg-[var(--color-surface-raised)] rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-[var(--color-surface-sunken)] border-b border-[var(--color-border)]">
               <tr>
@@ -293,7 +293,7 @@ export function PropertiesView() {
               <label className="text-sm font-medium text-[var(--color-foreground)] mb-1 block">Property Type</label>
               <select
                 {...register('type')}
-                className="w-full px-3 py-2 text-sm rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                className="w-full px-3 py-2 text-sm rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface-sunken)] text-[var(--color-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)] transition-colors"
               >
                 <option value="apartment">Apartment</option>
                 <option value="duplex">Duplex</option>

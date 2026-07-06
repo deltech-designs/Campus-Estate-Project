@@ -27,14 +27,14 @@ export function StaffView() {
         <h2 className="text-xl font-bold font-[var(--font-display)]">Staff</h2>
         <Button size="sm">+ Add Staff</Button>
       </div>
-      <div className="bg-white rounded-[var(--radius-card)] shadow-[var(--shadow-card)] overflow-hidden">
+      <div className="bg-[var(--color-surface-raised)] rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-[var(--color-surface-2)] border-b border-[var(--color-border)]">
+          <thead className="bg-[var(--color-surface-sunken)] border-b border-[var(--color-border)]">
             <tr>{['Staff Member','Role','Zone','Hire Date','Status'].map(h => <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wide">{h}</th>)}</tr>
           </thead>
           <tbody className="divide-y divide-[var(--color-border)]">
             {staff.map(s => (
-              <tr key={s._id} className="hover:bg-[var(--color-surface)] transition-colors">
+              <tr key={s._id} className="hover:bg-[var(--color-surface-sunken)] transition-colors">
                 <td className="px-4 py-3"><div className="flex items-center gap-3"><Avatar name={fullName(s.firstName, s.lastName)} size="sm" /><span className="font-medium">{fullName(s.firstName, s.lastName)}</span></div></td>
                 <td className="px-4 py-3 capitalize text-[var(--color-muted)]">{s.role.replace('_', ' ')}</td>
                 <td className="px-4 py-3 text-[var(--color-muted)]">{s.estateZone ?? '—'}</td>

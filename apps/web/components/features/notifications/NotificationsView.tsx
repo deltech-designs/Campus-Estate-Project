@@ -149,7 +149,7 @@ export function NotificationsView() {
   return (
     <div className="space-y-6">
       {/* Header Panel */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[var(--color-surface-raised)] p-6 rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] hover:shadow-md hover:border-[var(--color-primary)]/10 transition-all duration-300">
         <div className="flex items-center gap-3">
           <div className="p-3 bg-[var(--color-primary-light)] rounded-lg text-[var(--color-primary)]">
             <Bell size={24} className="animate-[pulse_2s_infinite]" />
@@ -189,7 +189,7 @@ export function NotificationsView() {
                 'px-4 py-2 text-sm font-semibold capitalize rounded-lg transition-all',
                 activeTab === tab
                   ? 'bg-[var(--color-primary)] text-white shadow-sm'
-                  : 'text-[var(--color-text-secondary)] hover:bg-white hover:text-[var(--color-text-primary)] border border-transparent hover:border-[var(--color-border)]',
+                  : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)] border border-transparent hover:border-[var(--color-border)]',
               ].join(' ')}
             >
               {tab === 'all' ? 'All Alerts' : tab}
@@ -214,7 +214,7 @@ export function NotificationsView() {
           <div
             key={n.id}
             className={[
-              'p-5 rounded-[var(--radius-lg)] border transition-all duration-200 flex gap-4 bg-white',
+              'p-5 rounded-[var(--radius-lg)] border transition-all duration-200 flex gap-4 bg-[var(--color-surface-raised)] hover:shadow-md hover:border-[var(--color-primary)]/10',
               n.read
                 ? 'border-[var(--color-border)] opacity-85'
                 : 'border-[var(--color-primary)]/20 shadow-sm border-l-4 border-l-[var(--color-primary)]',
@@ -257,7 +257,7 @@ export function NotificationsView() {
         ))}
 
         {filteredItems.length === 0 && (
-          <div className="bg-white rounded-[var(--radius-lg)] border border-[var(--color-border)] p-12 text-center">
+          <div className="bg-[var(--color-surface-raised)] rounded-[var(--radius-lg)] border border-[var(--color-border)] p-12 text-center shadow-sm">
             <span className="text-4xl mb-3 block">🎉</span>
             <h4 className="font-bold text-sm text-[var(--color-foreground)] mb-1">All Caught Up!</h4>
             <p className="text-xs text-[var(--color-muted)]">

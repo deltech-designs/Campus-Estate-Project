@@ -38,8 +38,16 @@ export function LoginView() {
   const onSubmit = async (values: FormValues) => {
     try {
       setError(null);
-      await login(values.email, values.password);
-      router.push('/overview');
+      const loggedInUser = await login(values.email, values.password);
+      if (loggedInUser.role === 'tenant') {
+        router.push('/tenants');
+      } else if (loggedInUser.role === 'admin') {
+        router.push('/admin/overview');
+      } else if (loggedInUser.role === 'manager') {
+        router.push('/manager/overview');
+      } else {
+        router.push('/overview');
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
     }

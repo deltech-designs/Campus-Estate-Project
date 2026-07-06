@@ -20,11 +20,11 @@ declare global {
 const repo = new UserRepository();
 
 export const initPassport = (): void => {
-  const clientId = process.env['GOOGLE_CLIENT_ID'];
-  const clientSecret = process.env['GOOGLE_CLIENT_SECRET'];
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
   const callbackUrl =
-    process.env['GOOGLE_CALLBACK_URL'] ||
-    `${process.env['API_BASE_URL']}/api/auth/google/callback`;
+    process.env.GOOGLE_CALLBACK_URL ||
+    `${process.env.API_BASE_URL}/api/auth/google/callback`;
 
   if (!clientId || !clientSecret) {
     console.log('[PASSPORT] Google Client ID or Secret missing. GoogleStrategy not registered.');

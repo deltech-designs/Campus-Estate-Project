@@ -42,10 +42,6 @@ apps/web/
 │   │   ├── leases/page.tsx
 │   │   ├── payments/page.tsx
 │   │   ├── maintenance/page.tsx
-│   │   ├── vendors/page.tsx
-│   │   ├── staff/page.tsx
-│   │   ├── users/page.tsx
-│   │   ├── reports/page.tsx
 │   │   └── settings/page.tsx
 │   │
 │   ├── (landlord)/                    # Landlord/Agent dashboard — role: landlord
@@ -56,8 +52,7 @@ apps/web/
 │   │   ├── leases/page.tsx
 │   │   ├── payments/page.tsx
 │   │   ├── maintenance/page.tsx
-│   │   ├── vendors/page.tsx
-│   │   └── reports/page.tsx
+│   │   
 │   │
 │   ├── (tenant)/                      # Tenant dashboard — role: tenant
 │   │   ├── layout.tsx                 # TenantShell
@@ -75,14 +70,11 @@ apps/web/
 │   │   ├── admin/
 │   │   │   ├── overview/              # AdminOverviewView + use-admin-overview.ts
 │   │   │   ├── properties/            # Full CRUD — PropertiesView, forms, table
-│   │   │   ├── tenants/               # TenantListView, KYC management
+│   │   │   ├── tenants/               # TenantListView, KYC management, and property rented
 │   │   │   ├── leases/                # LeaseListView, force-renew, terminate
-│   │   │   ├── payments/              # Platform-wide PaymentsView
+│   │   │   ├── payments/              # Platform-wide PaymentsView, paying for rents
 │   │   │   ├── maintenance/           # AllMaintenanceView, assign vendors
-│   │   │   ├── vendors/               # VendorRegistryView
-│   │   │   ├── staff/                 # StaffView
-│   │   │   ├── users/                 # UserManagementView, create/deactivate
-│   │   │   ├── reports/               # ReportsView, charts, exports
+│   │   │   ├── notifications/         # AllNotificationsView
 │   │   │   └── settings/              # SettingsView
 │   │   │
 │   │   ├── landlord/
@@ -92,14 +84,15 @@ apps/web/
 │   │   │   ├── leases/                # Create & manage own leases
 │   │   │   ├── payments/              # Track rent, mark received
 │   │   │   ├── maintenance/           # View & respond to requests
-│   │   │   ├── vendors/               # View assigned contractors
-│   │   │   └── reports/               # Per-property reports
+│   │   │   ├── notifications/         # MyNotificationsView
+│   │   │   ├── profile/               #  ProfileEditView, KYC upload
 │   │   │
 │   │   ├── tenant/
 │   │   │   ├── overview/              # TenantOverviewView — lease + payment summary
 │   │   │   ├── my-lease/              # LeaseDetailView — read-only
 │   │   │   ├── payments/              # PaymentHistoryView, download receipts
 │   │   │   ├── maintenance/           # SubmitRequestForm, RequestTracker
+│   │   │   ├── notifications/         # MyNotificationsView
 │   │   │   └── profile/               # ProfileEditView, KYC upload
 │   │   │
 │   │   └── auth/                      # LoginForm, RegisterForm

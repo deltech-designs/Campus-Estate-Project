@@ -5,6 +5,8 @@ import cors from 'cors';
 import morgan from 'morgan';
 import passport from 'passport';
 import helmet from 'helmet';
+import dotenv from 'dotenv';
+
 import { initPassport } from './config/passport';
 import { errorHandler } from './shared/middleware/errorHandler';
 import authRoutes from './auth/auth.routes';
@@ -17,6 +19,7 @@ import vendorRoutes from './vendors/vendors.routes';
 import staffRoutes from './staff/staff.routes';
 
 // Initialize Passport Strategies
+dotenv.config();
 initPassport();
 
 const app: Application = express();
@@ -24,10 +27,10 @@ const app: Application = express();
 app.use(helmet());
 app.use(
   session({
-    secret: process.env['SESSION_SECRET'] || 'keyboard_cat',
+    secret: process.env.SESSION_SECRET || 'keyboard_cat',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: process.env['NODE_ENV'] === 'production' },
+    cookie: { secure: process.env.NODE_ENV === 'production' },
   }),
 );
 
@@ -49,13 +52,13 @@ app.use(
       }
       
       const allowedOrigins = [
-        process.env['CLIENT_ORIGIN'] || 'http://localhost:3000',
+        process.env.CLIENT_ORIGIN || 'http://localhost:3000',
         'http://localhost:3000',
         'http://127.0.0.1:3000',
       ];
       
       const isAllowed = allowedOrigins.includes(origin) || 
-        (process.env['NODE_ENV'] !== 'production' && (
+        (process.env.NODE_ENV !== 'production' && (
           origin.startsWith('http://localhost:') || 
           origin.startsWith('http://127.0.0.1:') || 
           origin.startsWith('http://192.168.') ||

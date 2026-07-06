@@ -12,6 +12,7 @@ import { Button } from '@/components/partials/Button';
 import { Badge } from '@/components/partials/Badge';
 import Link from 'next/link';
 import { formatCurrency, formatDate } from '@/lib/utils';
+import { TenantOverviewView } from '@/components/features/tenant/overview/TenantOverviewView';
 
 export function OverviewView() {
   const { user } = useAuth();
@@ -57,8 +58,8 @@ export function OverviewView() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Info */}
-          <div className="lg:col-span-2 bg-white p-6 rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)]">
-            <h3 className="text-base font-semibold text-[var(--color-foreground)] mb-4">Platform Occupancy Details</h3>
+          <div className="lg:col-span-2 bg-[var(--color-surface-raised)] p-6 rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] hover:shadow-md hover:border-[var(--color-primary)]/10 transition-all duration-300">
+            <h3 className="text-base font-bold font-[var(--font-display)] text-[var(--color-foreground)] mb-4">Platform Occupancy Details</h3>
             <div className="flex items-center justify-between border-b border-[var(--color-border)] pb-4 mb-4">
               <div>
                 <p className="text-sm text-[var(--color-muted)]">Occupancy Rate</p>
@@ -85,9 +86,9 @@ export function OverviewView() {
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-white p-6 rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] flex flex-col justify-between">
+          <div className="bg-[var(--color-surface-raised)] p-6 rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] flex flex-col justify-between hover:shadow-md hover:border-[var(--color-primary)]/10 transition-all duration-300">
             <div>
-              <h3 className="text-base font-semibold text-[var(--color-foreground)] mb-3">System Actions</h3>
+              <h3 className="text-base font-bold font-[var(--font-display)] text-[var(--color-foreground)] mb-3">System Actions</h3>
               <p className="text-xs text-[var(--color-muted)] mb-4">Quick shortcuts to manage platform estates</p>
             </div>
             <div className="space-y-2.5">
@@ -129,10 +130,10 @@ export function OverviewView() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Complaints list */}
-          <div className="lg:col-span-2 bg-white p-6 rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)]">
+          <div className="lg:col-span-2 bg-[var(--color-surface-raised)] p-6 rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] hover:shadow-md hover:border-[var(--color-primary)]/10 transition-all duration-300">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-base font-semibold text-[var(--color-foreground)]">Recent Tenant Complaints</h3>
-              <Link href="/maintenance" className="text-xs text-[var(--color-primary)] hover:underline font-semibold">View all</Link>
+              <h3 className="text-base font-bold font-[var(--font-display)] text-[var(--color-foreground)]">Recent Tenant Complaints</h3>
+              <Link href="/manager/maintenance" className="text-xs text-[var(--color-primary)] hover:underline font-semibold">View all</Link>
             </div>
             {activeComplaints.length > 0 ? (
               <div className="divide-y divide-[var(--color-border)]">
@@ -154,16 +155,16 @@ export function OverviewView() {
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-white p-6 rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] flex flex-col justify-between">
+          <div className="bg-[var(--color-surface-raised)] p-6 rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] flex flex-col justify-between hover:shadow-md hover:border-[var(--color-primary)]/10 transition-all duration-300">
             <div>
-              <h3 className="text-base font-semibold text-[var(--color-foreground)] mb-2">Portfolio Management</h3>
+              <h3 className="text-base font-bold font-[var(--font-display)] text-[var(--color-foreground)] mb-2">Portfolio Management</h3>
               <p className="text-xs text-[var(--color-muted)] mb-4">Perform actions on your units</p>
             </div>
             <div className="space-y-2">
-              <Link href="/properties" className="block w-full text-center py-2 px-4 rounded-[var(--radius-btn)] border border-[var(--color-border)] hover:bg-[var(--color-surface-sunken)] text-xs font-semibold transition-all">
+              <Link href="/manager/properties" className="block w-full text-center py-2 px-4 rounded-[var(--radius-btn)] border border-[var(--color-border)] hover:bg-[var(--color-surface-sunken)] text-xs font-semibold transition-all">
                 Manage Property Units
               </Link>
-              <Link href="/leases" className="block w-full text-center py-2 px-4 rounded-[var(--radius-btn)] border border-[var(--color-border)] hover:bg-[var(--color-surface-sunken)] text-xs font-semibold transition-all">
+              <Link href="/manager/leases" className="block w-full text-center py-2 px-4 rounded-[var(--radius-btn)] border border-[var(--color-border)] hover:bg-[var(--color-surface-sunken)] text-xs font-semibold transition-all">
                 Prepare Lease Agreement
               </Link>
             </div>
@@ -173,72 +174,6 @@ export function OverviewView() {
     );
   }
 
-  // ─── TENANT DASHBOARD ──────────────────────────────────────────────────────
-  const rentedProperty = properties.find(p => p.status === 'occupied') || properties[0];
-  const pendingRent = payments.find(p => p.status === 'pending' || p.status === 'overdue');
-  const myComplaints = maintenance.length;
-
-  return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-bold font-[var(--font-display)] text-[var(--color-foreground)] mb-1">
-          Welcome to CampusEstate, Tenant
-        </h2>
-        <p className="text-sm text-[var(--color-muted)]">Manage your rent, file maintenance requests, and check statuses</p>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <StatCard title="My Rented Home" value={rentedProperty ? rentedProperty.title : 'No active property'} icon="🏠" />
-        <StatCard title="Outstanding Rent" value={pendingRent ? `₦${pendingRent.amount.toLocaleString()}` : '₦0'} icon="💳" />
-        <StatCard title="Fault Reports Filed" value={myComplaints} icon="🔧" />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Rented Property Info */}
-        <div className="lg:col-span-2 bg-white p-6 rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)]">
-          <h3 className="text-base font-semibold text-[var(--color-foreground)] mb-4">My Lease & Rent Status</h3>
-          {rentedProperty ? (
-            <div className="space-y-4">
-              <div className="p-4 bg-[var(--color-surface-sunken)] rounded-lg flex items-center justify-between">
-                <div>
-                  <h4 className="font-bold text-sm text-[var(--color-foreground)]">{rentedProperty.title}</h4>
-                  <p className="text-xs text-[var(--color-muted)]">{rentedProperty.address} • Zone: {rentedProperty.estateZone}</p>
-                </div>
-                <Badge variant="success">Active Lease</Badge>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 text-sm border-t border-[var(--color-border)] pt-4">
-                <div>
-                  <p className="text-xs text-[var(--color-muted)]">Monthly Rent Amount</p>
-                  <p className="font-bold text-[var(--color-foreground)]">₦{rentedProperty.rentAmount.toLocaleString()}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-[var(--color-muted)]">Next Payment Due Date</p>
-                  <p className="font-bold text-[var(--color-foreground)]">{pendingRent ? formatDate(pendingRent.dueDate) : 'No pending dues'}</p>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <p className="text-xs text-[var(--color-muted)] py-6 text-center">No active lease documents found</p>
-          )}
-        </div>
-
-        {/* Quick Actions */}
-        <div className="bg-white p-6 rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-card)] flex flex-col justify-between">
-          <div>
-            <h3 className="text-base font-semibold text-[var(--color-foreground)] mb-2">Tenant Services</h3>
-            <p className="text-xs text-[var(--color-muted)] mb-4">Access tenant portal functions directly</p>
-          </div>
-          <div className="space-y-2">
-            <Link href="/maintenance" className="block w-full text-center py-2.5 px-4 rounded-[var(--radius-btn)] bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-hover)] text-sm font-semibold transition-all">
-              File a Fault Report
-            </Link>
-            <Link href="/payments" className="block w-full text-center py-2.5 px-4 rounded-[var(--radius-btn)] border border-[var(--color-border)] hover:bg-[var(--color-surface-sunken)] text-sm font-semibold transition-all">
-              View Payment Receipts
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  // ─── TENANT DASHBOARD — delegate to dedicated component ────────────────────
+  return <TenantOverviewView />;
 }
