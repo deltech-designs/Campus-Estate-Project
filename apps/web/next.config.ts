@@ -6,8 +6,16 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
   allowedDevOrigins: ['192.168.56.1', 'localhost', '127.0.0.1'],
   experimental: {
-    // Optimise package imports for better tree-shaking
     optimizePackageImports: ['@tanstack/react-query'],
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        // In development, proxies to localhost:5000. In production, proxies to the Render URL.
+        destination: `${process.env.BACKEND_API_URL || 'http://localhost:5000'}/api/:path*`,
+      },
+    ];
   },
 };
 
