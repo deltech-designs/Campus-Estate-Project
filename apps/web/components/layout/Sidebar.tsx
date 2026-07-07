@@ -33,7 +33,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   // ── Shared / Admin + Manager ──────────────────────────────────────────────
   { href: '/overview',      label: 'Overview',      icon: LayoutDashboard },
-  { href: '/properties',    label: 'Properties',    icon: Building2,       roles: ['admin', 'manager'] },
+  { href: '/properties',    label: 'Properties',    icon: Building2,       roles: ['admin', 'manager', 'tenant'] },
   { href: '/tenants',       label: 'Tenants',       icon: Users,           roles: ['admin', 'manager'] },
   { href: '/leases',        label: 'Leases',        icon: FileText,        roles: ['admin', 'manager'] },
   { href: '/maintenance',   label: 'Maintenance',   icon: Wrench },
@@ -64,6 +64,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       if (user?.role === 'tenant') {
         if (item.href === '/overview') {
           return { ...item, href: '/tenants' };
+        }
+        if (item.href === '/properties') {
+          return { ...item, href: '/tenants/properties' };
         }
         if (item.href === '/my-lease') {
           return { ...item, href: '/tenants/my-lease' };
