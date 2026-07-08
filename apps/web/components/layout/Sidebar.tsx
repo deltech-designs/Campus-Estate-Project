@@ -39,7 +39,7 @@ const navItems: NavItem[] = [
   { href: '/maintenance',   label: 'Maintenance',   icon: Wrench },
   { href: '/payments',      label: 'Payments',      icon: CreditCard },
   { href: '/chat',          label: 'Chat',          icon: MessageSquare,   roles: ['admin', 'manager'] },
-  { href: '/notifications', label: 'Notifications', icon: Bell,            roles: ['admin', 'manager'] },
+  { href: '/notifications', label: 'Notifications', icon: Bell,            roles: ['admin', 'manager', 'tenant'] },
   { href: '/vendors',       label: 'Vendors',       icon: HardHat,         roles: ['admin', 'manager'] },
   { href: '/staff',         label: 'Staff',         icon: UserCog,         roles: ['admin'] },
   { href: '/reports',       label: 'Reports',       icon: BarChart3,       roles: ['admin', 'manager'] },
@@ -79,6 +79,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         }
         if (item.href === '/maintenance') {
           return { ...item, href: '/tenants/maintenance' };
+        }
+        if (item.href === '/notifications') {
+          return { ...item, href: '/tenants/notifications' };
         }
       }
       if (user?.role === 'manager') {

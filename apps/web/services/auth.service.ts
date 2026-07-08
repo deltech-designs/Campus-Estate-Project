@@ -4,6 +4,7 @@ const API = process.env['NEXT_PUBLIC_API_URL']!;
 
 interface AuthResponse {
   user: IUser;
+  token?: string;
 }
 
 export const authService = {
@@ -16,7 +17,11 @@ export const authService = {
     });
     const json = await res.json();
     if (!json.success) throw new Error(json.message as string);
-    return json.data as IRegisterResponse;
+    const data = json.data as IRegisterResponse;
+    if (data.token && typeof window !== 'undefined') {
+      document.cookie = `ems_token=${data.token}; path=/; max-age=604800; SameSite=Lax`;
+    }
+    return data;
   },
 
   async login(payload: ILoginPayload): Promise<AuthResponse> {
@@ -28,10 +33,17 @@ export const authService = {
     });
     const json = await res.json();
     if (!json.success) throw new Error(json.message as string);
-    return json.data as AuthResponse;
+    const data = json.data as AuthResponse;
+    if (data.token && typeof window !== 'undefined') {
+      document.cookie = `ems_token=${data.token}; path=/; max-age=604800; SameSite=Lax`;
+    }
+    return data;
   },
 
   async logout(): Promise<void> {
+    if (typeof window !== 'undefined') {
+      document.cookie = 'ems_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    }
     await fetch(`${API}/api/auth/logout`, {
       method: 'POST',
       credentials: 'include',
@@ -75,6 +87,10 @@ export const authService = {
     });
     const json = await res.json();
     if (!json.success) throw new Error(json.message as string);
-    return json.data as AuthResponse;
+    const data = json.data as AuthResponse;
+    if (data.token && typeof window !== 'undefined') {
+      document.cookie = `ems_token=${data.token}; path=/; max-age=604800; SameSite=Lax`;
+    }
+    return data;
   },
 };

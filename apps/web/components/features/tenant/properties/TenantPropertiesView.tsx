@@ -10,7 +10,7 @@ import { Select } from '@/components/partials/Select';
 import { Button } from '@/components/partials/Button';
 import { Modal } from '@/components/partials/Modal';
 import { formatCurrency, capitalise } from '@/lib/utils';
-import type { IProperty, PropertyType, PropertyStatus } from '@ems/shared';
+import type { IProperty, PropertyType, PropertyStatus, IPopulatedLandlord } from '@ems/shared';
 import {
   MapPin,
   Home,
@@ -299,37 +299,42 @@ export function TenantPropertiesView() {
             {/* Landlord / Manager Details */}
             <div className="space-y-3 border-t border-[var(--color-border)] pt-4">
               <h4 className="font-bold text-xs uppercase tracking-wider text-[var(--color-text-secondary)]">Managing Landlord / Agent</h4>
-              {selectedProperty.landlordId ? (
-                <div className="p-4 rounded-xl border border-[var(--color-border)] bg-indigo-50/10 dark:bg-indigo-950/5 space-y-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-[var(--color-primary-light)] flex items-center justify-center text-[var(--color-primary)] shrink-0">
-                      <User size={16} />
-                    </div>
-                    <div>
-                      <p className="text-xs text-[var(--color-muted)]">Full Name</p>
-                      <p className="text-sm font-semibold text-[var(--color-foreground)]">
-                        {selectedProperty.landlordId.firstName} {selectedProperty.landlordId.lastName}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-[var(--color-border)]/40 text-xs">
-                    <div className="flex items-center gap-2">
-                      <Mail size={14} className="text-[var(--color-muted)] shrink-0" />
-                      <a href={`mailto:${selectedProperty.landlordId.email}`} className="text-[var(--color-primary)] hover:underline font-medium truncate">
-                        {selectedProperty.landlordId.email}
-                      </a>
-                    </div>
-                    {selectedProperty.landlordId.phone && (
-                      <div className="flex items-center gap-2">
-                        <Phone size={14} className="text-[var(--color-muted)] shrink-0" />
-                        <a href={`tel:${selectedProperty.landlordId.phone}`} className="text-[var(--color-primary)] hover:underline font-medium">
-                          {selectedProperty.landlordId.phone}
-                        </a>
+              {selectedProperty.landlordId && typeof selectedProperty.landlordId === 'object' ? (
+                (() => {
+                  const landlord = selectedProperty.landlordId as IPopulatedLandlord;
+                  return (
+                    <div className="p-4 rounded-xl border border-[var(--color-border)] bg-indigo-50/10 dark:bg-indigo-950/5 space-y-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-full bg-[var(--color-primary-light)] flex items-center justify-center text-[var(--color-primary)] shrink-0">
+                          <User size={16} />
+                        </div>
+                        <div>
+                          <p className="text-xs text-[var(--color-muted)]">Full Name</p>
+                          <p className="text-sm font-semibold text-[var(--color-foreground)]">
+                            {landlord.firstName} {landlord.lastName}
+                          </p>
+                        </div>
                       </div>
-                    )}
-                  </div>
-                </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-[var(--color-border)]/40 text-xs">
+                        <div className="flex items-center gap-2">
+                          <Mail size={14} className="text-[var(--color-muted)] shrink-0" />
+                          <a href={`mailto:${landlord.email}`} className="text-[var(--color-primary)] hover:underline font-medium truncate">
+                            {landlord.email}
+                          </a>
+                        </div>
+                        {landlord.phone && (
+                          <div className="flex items-center gap-2">
+                            <Phone size={14} className="text-[var(--color-muted)] shrink-0" />
+                            <a href={`tel:${landlord.phone}`} className="text-[var(--color-primary)] hover:underline font-medium">
+                              {landlord.phone}
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })()
               ) : (
                 <div className="p-4 rounded-xl border border-dashed border-[var(--color-border)] text-center text-xs text-[var(--color-muted)]">
                   No landlord details specified. Please contact administration.

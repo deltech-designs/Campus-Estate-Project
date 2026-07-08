@@ -20,7 +20,11 @@ export const authenticate = (
   res: Response,
   next: NextFunction,
 ): void => {
-  const token = req.cookies?.ems_token as string | undefined;
+  let token = req.cookies?.ems_token as string | undefined;
+
+  if (!token && req.headers.authorization?.startsWith('Bearer ')) {
+    token = req.headers.authorization.split(' ')[1];
+  }
 
   if (!token) {
     res
@@ -49,7 +53,11 @@ export const optionalAuthenticate = (
   res: Response,
   next: NextFunction,
 ): void => {
-  const token = req.cookies?.ems_token as string | undefined;
+  let token = req.cookies?.ems_token as string | undefined;
+
+  if (!token && req.headers.authorization?.startsWith('Bearer ')) {
+    token = req.headers.authorization.split(' ')[1];
+  }
 
   if (token) {
     try {
