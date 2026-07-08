@@ -1,5 +1,5 @@
 import type { IStaff, ICreateStaffPayload, IUpdateStaffPayload } from '@ems/shared';
-const API = process.env['NEXT_PUBLIC_API_URL']!;
+const API = process.env['NEXT_PUBLIC_API_URL'] || '';
 const base = `${API}/api/staff`;
 const headers = { 'Content-Type': 'application/json' };
 const creds = { credentials: 'include' as const };

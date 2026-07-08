@@ -70,7 +70,7 @@ export function MaintenanceView() {
   // Submit request mutation
   const createMutation = useMutation({
     mutationFn: async (payload: FormValues) => {
-      const API = process.env.NEXT_PUBLIC_API_URL!;
+      const API = process.env.NEXT_PUBLIC_API_URL || '';
       const res = await fetch(`${API}/api/maintenance`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -88,7 +88,7 @@ export function MaintenanceView() {
   // Update status/vendor mutation
   const updateMutation = useMutation({
     mutationFn: async (payload: { id: string; status: MaintenanceStatus; vendorId?: string }) => {
-      const API = process.env.NEXT_PUBLIC_API_URL!;
+      const API = process.env.NEXT_PUBLIC_API_URL || '';
       const res = await fetch(`${API}/api/maintenance/${payload.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },

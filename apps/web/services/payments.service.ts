@@ -1,5 +1,5 @@
 import type { IPayment, ICreatePaymentPayload, IUpdatePaymentPayload } from '@ems/shared';
-const API = process.env['NEXT_PUBLIC_API_URL']!;
+const API = process.env['NEXT_PUBLIC_API_URL'] || '';
 const base = `${API}/api/payments`;
 const headers = { 'Content-Type': 'application/json' };
 const creds = { credentials: 'include' as const };
