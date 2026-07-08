@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, Response, CookieOptions } from 'express';
 import passport from 'passport';
 import { AuthService } from './auth.service';
 import { sendSuccess } from '../shared/utils/response';
@@ -9,10 +9,12 @@ import type { User } from './auth.model';
 
 const service = new AuthService();
 
-const COOKIE_OPTIONS = {
+const isProduction = process.env['NODE_ENV'] === 'production';
+
+const COOKIE_OPTIONS: CookieOptions = {
   httpOnly: true,
-  secure: process.env['NODE_ENV'] === 'production',
-  sameSite: 'lax' as const,
+  secure: isProduction,
+  sameSite: isProduction ? 'none' : 'lax',
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
 };
 
