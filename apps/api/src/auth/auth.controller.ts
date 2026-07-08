@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, Response, CookieOptions } from 'express';
 import passport from 'passport';
 import { AuthService } from './auth.service';
 import { sendSuccess } from '../shared/utils/response';
@@ -9,10 +9,12 @@ import type { User } from './auth.model';
 
 const service = new AuthService();
 
-const COOKIE_OPTIONS = {
+const isProduction = process.env.NODE_ENV === 'production';
+
+const COOKIE_OPTIONS: CookieOptions = {
   httpOnly: true,
-  secure: process.env['NODE_ENV'] === 'production',
-  sameSite: 'lax' as const,
+  secure: isProduction,
+  sameSite: isProduction ? 'none' : 'lax',
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
 };
 
@@ -22,14 +24,14 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     sendSuccess(res, { user, otpRequired, otp }, 'OTP sent for verification', 201);
   } else {
     res.cookie('ems_token', token!, COOKIE_OPTIONS);
-    sendSuccess(res, { user }, 'Registration successful', 201);
+    sendSuccess(res, { user, token }, 'Registration successful', 201);
   }
 };
 
 export const login = async (req: Request, res: Response): Promise<void> => {
   const { user, token } = await service.login(req.body);
   res.cookie('ems_token', token, COOKIE_OPTIONS);
-  sendSuccess(res, { user }, 'Login successful');
+  sendSuccess(res, { user, token }, 'Login successful');
 };
 
 export const logout = (_req: Request, res: Response): void => {
@@ -55,7 +57,7 @@ export const resetPassword = async (req: Request, res: Response): Promise<void> 
 export const verifyOtp = async (req: Request, res: Response): Promise<void> => {
   const { user, token } = await service.verifyOtp(req.body);
   res.cookie('ems_token', token, COOKIE_OPTIONS);
-  sendSuccess(res, { user }, 'OTP verified successfully and logged in');
+  sendSuccess(res, { user, token }, 'OTP verified successfully and logged in');
 };
 
 export const googleLogin = async (req: Request, res: Response, next: NextFunction): Promise<void> => {

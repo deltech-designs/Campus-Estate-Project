@@ -4,6 +4,40 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 import type { IUser, UserRole, IRegisterResponse } from '@ems/shared';
 import { authService } from '@/services/auth.service';
 
+if (typeof window !== 'undefined' && !(window as any).__fetchIntercepted) {
+  (window as any).__fetchIntercepted = true;
+  const originalFetch = window.fetch;
+  window.fetch = async function (input, init) {
+    let url = '';
+    if (typeof input === 'string') {
+      url = input;
+    } else if (input instanceof URL) {
+      url = input.toString();
+    } else if (input && 'url' in input) {
+      url = input.url;
+    }
+
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+
+    if (url.startsWith(apiUrl)) {
+      const token = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('ems_token='))
+        ?.split('=')[1];
+
+      if (token) {
+        init = init || {};
+        const headers = new Headers(init.headers);
+        if (!headers.has('Authorization')) {
+          headers.set('Authorization', `Bearer ${token}`);
+        }
+        init.headers = headers;
+      }
+    }
+    return originalFetch.call(this, input, init);
+  };
+}
+
 interface AuthContextValue {
   user: IUser | null;
   isLoading: boolean;

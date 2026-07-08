@@ -18,7 +18,7 @@ const schema = z.object({
 });
 type FormValues = z.infer<typeof schema>;
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API = process.env.NEXT_PUBLIC_API_URL || '';
 
 export function LoginView() {
   const { login } = useAuth();
@@ -259,7 +259,7 @@ export function LoginView() {
             </p>
 
             {/* Quick Demo Credentials helper */}
-            <div className="mt-6 p-4 rounded-xl bg-indigo-50/50 border border-indigo-100/50 dark:bg-indigo-950/20 dark:border-indigo-900/30 text-xs">
+            {/* <div className="mt-6 p-4 rounded-xl bg-indigo-50/50 border border-indigo-100/50 dark:bg-indigo-950/20 dark:border-indigo-900/30 text-xs">
               <p className="font-semibold text-indigo-950 dark:text-indigo-200 mb-2 flex items-center gap-1.5">
                 <ShieldCheck size={14} className="text-indigo-600 dark:text-indigo-400" />
                 Demo Credentials (Admin Seeded)
@@ -279,7 +279,7 @@ export function LoginView() {
                   Autofill
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

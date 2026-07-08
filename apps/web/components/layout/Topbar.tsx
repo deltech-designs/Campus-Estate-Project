@@ -28,7 +28,28 @@ export function Topbar({ onMenuClick }: TopbarProps) {
   const pathname = usePathname();
   const { user } = useAuth();
 
-  const title = Object.entries(pageTitles).find(([key]) => pathname.startsWith(key))?.[1] ?? 'Dashboard';
+  let title = 'Dashboard';
+  if (user?.role === 'tenant') {
+    if (pathname === '/tenants') {
+      title = 'Overview';
+    } else if (pathname.startsWith('/tenants/properties')) {
+      title = 'Properties';
+    } else if (pathname.startsWith('/tenants/my-lease')) {
+      title = 'My Lease';
+    } else if (pathname.startsWith('/tenants/payments')) {
+      title = 'Payments';
+    } else if (pathname.startsWith('/tenants/maintenance')) {
+      title = 'Maintenance';
+    } else if (pathname.startsWith('/tenants/profile')) {
+      title = 'Profile';
+    } else if (pathname.startsWith('/tenants/notifications')) {
+      title = 'Notifications';
+    } else if (pathname.startsWith('/tenants/overview')) {
+      title = 'Overview';
+    }
+  } else {
+    title = Object.entries(pageTitles).find(([key]) => pathname.startsWith(key))?.[1] ?? 'Dashboard';
+  }
 
   return (
     <header className="h-16 flex items-center justify-between px-6 bg-[var(--color-surface-raised)] border-b border-[var(--color-border)] shadow-sm shrink-0">

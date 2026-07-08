@@ -1,9 +1,10 @@
 import type { IUser, ILoginPayload, IRegisterPayload, IForgotPasswordPayload, IResetPasswordPayload, IRegisterResponse, IVerifyOtpPayload } from '@ems/shared';
 
-const API = process.env['NEXT_PUBLIC_API_URL']!;
+const API = process.env['NEXT_PUBLIC_API_URL'] || '';
 
 interface AuthResponse {
   user: IUser;
+  token?: string;
 }
 
 export const authService = {
@@ -28,7 +29,8 @@ export const authService = {
     });
     const json = await res.json();
     if (!json.success) throw new Error(json.message as string);
-    return json.data as AuthResponse;
+    const data = json.data as AuthResponse;
+    return data;
   },
 
   async logout(): Promise<void> {
@@ -75,6 +77,7 @@ export const authService = {
     });
     const json = await res.json();
     if (!json.success) throw new Error(json.message as string);
-    return json.data as AuthResponse;
+    const data = json.data as AuthResponse;
+    return data;
   },
 };

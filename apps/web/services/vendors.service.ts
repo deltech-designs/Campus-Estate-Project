@@ -1,5 +1,5 @@
 import type { IVendor, ICreateVendorPayload, IUpdateVendorPayload } from '@ems/shared';
-const API = process.env['NEXT_PUBLIC_API_URL']!;
+const API = process.env['NEXT_PUBLIC_API_URL'] || '';
 const base = `${API}/api/vendors`;
 const headers = { 'Content-Type': 'application/json' };
 const creds = { credentials: 'include' as const };

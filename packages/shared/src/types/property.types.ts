@@ -13,10 +13,18 @@ export interface IProperty {
   bedrooms: number;
   estateZone: string;
   amenities: string[];
-  landlordId?: any;
+  landlordId?: IPopulatedLandlord | string;
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface IPopulatedLandlord {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
 }
 
 export interface ICreatePropertyPayload {

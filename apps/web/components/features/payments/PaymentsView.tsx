@@ -42,7 +42,7 @@ export function PaymentsView() {
     mutationFn: async (id: string) => {
       // Direct update call mock or patch via service if exists
       // Simulate patch
-      const API = process.env.NEXT_PUBLIC_API_URL!;
+      const API = process.env.NEXT_PUBLIC_API_URL || '';
       const res = await fetch(`${API}/api/payments/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
