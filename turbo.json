@@ -3,9 +3,10 @@
   "ui": "tui",
   "globalEnv": ["BACKEND_API_URL"],
   "tasks": {
-    "build": {
+   "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "env": ["BACKEND_API_URL"],
+      "outputs": [".next/**", "!.next/cache/**"]
     },
     "dev": {
       "cache": false,
