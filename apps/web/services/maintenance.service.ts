@@ -1,5 +1,5 @@
 import type { IMaintenanceRequest, ICreateMaintenancePayload, IUpdateMaintenancePayload } from '@ems/shared';
-const API = process.env['NEXT_PUBLIC_API_URL'] || '';
+import { API_URL as API } from '@/lib/config';
 const base = `${API}/api/maintenance`;
 const headers = { 'Content-Type': 'application/json' };
 const creds = { credentials: 'include' as const };

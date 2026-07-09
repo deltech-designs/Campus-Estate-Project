@@ -1,6 +1,6 @@
 import type { ITenant, ICreateTenantPayload, IUpdateTenantPayload } from '@ems/shared';
 
-const API = process.env['NEXT_PUBLIC_API_URL'] || '';
+import { API_URL as API } from '@/lib/config';
 
 export const tenantsService = {
   async getAll(): Promise<ITenant[]> {

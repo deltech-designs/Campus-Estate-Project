@@ -22,7 +22,7 @@ const schema = z.object({
 });
 type FormValues = z.infer<typeof schema>;
 
-const API = process.env.NEXT_PUBLIC_API_URL || '';
+import { API_URL as API } from '@/lib/config';
 
 export function LandlordRegisterView() {
   const { register: authRegister } = useAuth();

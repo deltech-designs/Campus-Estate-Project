@@ -11,6 +11,7 @@ import { Badge } from '@/components/partials/Badge';
 import { Button } from '@/components/partials/Button';
 import { Modal } from '@/components/partials/Modal';
 import { formatDate, formatCurrency } from '@/lib/utils';
+import { API_URL as API } from '@/lib/config';
 import type { IPayment, PaymentStatus, PaymentMethod } from '@ems/shared';
 import { DollarSign, Printer, CheckCircle, FileText, Landmark, CreditCard, Receipt, ArrowRight } from 'lucide-react';
 
@@ -42,7 +43,6 @@ export function PaymentsView() {
     mutationFn: async (id: string) => {
       // Direct update call mock or patch via service if exists
       // Simulate patch
-      const API = process.env.NEXT_PUBLIC_API_URL || '';
       const res = await fetch(`${API}/api/payments/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
