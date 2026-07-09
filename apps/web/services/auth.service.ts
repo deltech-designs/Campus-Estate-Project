@@ -1,6 +1,6 @@
 import type { IUser, ILoginPayload, IRegisterPayload, IForgotPasswordPayload, IResetPasswordPayload, IRegisterResponse, IVerifyOtpPayload } from '@ems/shared';
 
-const API = process.env['NEXT_PUBLIC_API_URL'] || '';
+import { API_URL as API } from '@/lib/config';
 
 interface AuthResponse {
   user: IUser;

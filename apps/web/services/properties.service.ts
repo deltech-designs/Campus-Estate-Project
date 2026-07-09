@@ -1,6 +1,5 @@
 import type { IProperty, ICreatePropertyPayload } from '@ems/shared';
-
-const API = process.env['NEXT_PUBLIC_API_URL'] || '';
+import { API_URL as API } from '@/lib/config';
 
 export const propertiesService = {
   async getAll(): Promise<IProperty[]> {

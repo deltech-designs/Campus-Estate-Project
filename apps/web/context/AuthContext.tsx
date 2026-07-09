@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import type { IUser, UserRole, IRegisterResponse } from '@ems/shared';
 import { authService } from '@/services/auth.service';
+import { API_URL } from '@/lib/config';
 
 if (typeof window !== 'undefined' && !(window as any).__fetchIntercepted) {
   (window as any).__fetchIntercepted = true;
@@ -17,9 +18,10 @@ if (typeof window !== 'undefined' && !(window as any).__fetchIntercepted) {
       url = input.url;
     }
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+    const apiUrl = API_URL;
+    const isApiRequest = url.startsWith('/api') || (apiUrl && url.startsWith(`${apiUrl}/api`));
 
-    if (url.startsWith(apiUrl)) {
+    if (isApiRequest) {
       const token = document.cookie
         .split('; ')
         .find((row) => row.startsWith('ems_token='))
