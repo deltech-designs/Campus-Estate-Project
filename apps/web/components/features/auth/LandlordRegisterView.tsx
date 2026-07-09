@@ -12,6 +12,7 @@ import { Input } from '@/components/partials/Input';
 import { Button } from '@/components/partials/Button';
 import { Modal } from '@/components/partials/Modal';
 import { Building2, FileCheck, Landmark, ShieldCheck, ArrowRight, UserCheck } from 'lucide-react';
+import { API_URL as API } from '@/lib/config';
 
 const schema = z.object({
   firstName: z.string().min(1, 'First name is required'),
@@ -22,7 +23,6 @@ const schema = z.object({
 });
 type FormValues = z.infer<typeof schema>;
 
-import { API_URL as API } from '@/lib/config';
 
 export function LandlordRegisterView() {
   const { register: authRegister } = useAuth();

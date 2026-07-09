@@ -11,6 +11,7 @@ import { Input } from '@/components/partials/Input';
 import { Button } from '@/components/partials/Button';
 import { Modal } from '@/components/partials/Modal';
 import { ShieldCheck, Building2, Users2, Landmark, ArrowLeft } from 'lucide-react';
+import { API_URL as API } from '@/lib/config';
 
 const schema = z.object({
   email: z.string().email('Invalid email'),
@@ -18,7 +19,6 @@ const schema = z.object({
 });
 type FormValues = z.infer<typeof schema>;
 
-import { API_URL as API } from '@/lib/config';
 
 export function LoginView() {
   const { login } = useAuth();
