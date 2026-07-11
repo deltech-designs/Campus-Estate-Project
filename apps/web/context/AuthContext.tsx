@@ -36,7 +36,26 @@ if (typeof window !== 'undefined' && !(window as any).__fetchIntercepted) {
         init.headers = headers;
       }
     }
-    return originalFetch.call(this, input, init);
+
+    const response = await originalFetch.call(this, input, init);
+
+    if (isApiRequest && response.status === 401) {
+      try {
+        const clone = response.clone();
+        const data = await clone.json();
+        if (data && (data.code === 'INVALID_TOKEN' || data.code === 'NO_TOKEN')) {
+          // Clear ems_token cookie (fallback for client-accessible cookies)
+          document.cookie = 'ems_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+          if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/login')) {
+            window.location.href = `/login?clear=true&from=${encodeURIComponent(window.location.pathname)}`;
+          }
+        }
+      } catch {
+        // Ignore json parse error
+      }
+    }
+
+    return response;
   };
 }
 

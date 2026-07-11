@@ -5,7 +5,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import passport from 'passport';
 import helmet from 'helmet';
-import dotenv from 'dotenv';
+
 
 import { initPassport } from './config/passport';
 import { errorHandler } from './shared/middleware/errorHandler';
@@ -19,7 +19,6 @@ import vendorRoutes from './vendors/vendors.routes';
 import staffRoutes from './staff/staff.routes';
 
 // Initialize Passport Strategies
-dotenv.config();
 initPassport();
 
 const app: Application = express();
@@ -39,7 +38,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // ─── Global middleware ────────────────────────────────────────────────────────
-if (process.env['NODE_ENV'] !== 'test') {
+if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('dev'));
 }
 

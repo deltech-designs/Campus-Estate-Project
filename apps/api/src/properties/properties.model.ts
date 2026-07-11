@@ -1,5 +1,6 @@
 import { prop, modelOptions, Severity, getModelForClass, Ref } from '@typegoose/typegoose';
 import type { PropertyType, PropertyStatus } from '@ems/shared';
+import { User } from '../auth/auth.model';
 
 @modelOptions({
   schemaOptions: { collection: 'properties', timestamps: true },
@@ -35,8 +36,8 @@ export class Property {
   @prop({ type: () => [String], default: [] })
   amenities!: string[];
 
-  @prop({ ref: () => 'User' })
-  landlordId?: Ref<any>;
+  @prop({ ref: () => User })
+  landlordId?: Ref<User> | string;
 
   @prop({ default: false })
   isDeleted!: boolean;
