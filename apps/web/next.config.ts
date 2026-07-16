@@ -1,9 +1,10 @@
 import type { NextConfig } from 'next';
 import path from 'path';
 
-const apiBaseUrl = process.env.BACKEND_API_URL || 
-  (process.env.NODE_ENV === 'development' 
-    ? 'http://localhost:5000' 
+const apiBaseUrl =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (process.env.NODE_ENV === 'development'
+    ? 'http://localhost:5000'
     : 'https://campus-estate-api.onrender.com');
 
 const nextConfig: NextConfig = {

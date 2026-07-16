@@ -1,6 +1,12 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+const ROLE_HOME: Record<string, string> = {
+  admin: '/admin/overview',
+  manager: '/manager/overview',
+  tenant: '/tenants',
+};
+
 function decodeJwt(token: string) {
   try {
     const parts = token.split('.');
@@ -71,14 +77,20 @@ export function middleware(req: NextRequest): NextResponse {
 
   // Redirect based on role when logged in
   if (token && !isExpired) {
+    // Protect dashboard route groups by role
+    if (pathname.startsWith('/admin') && role !== 'admin') {
+      return NextResponse.redirect(new URL(ROLE_HOME[role!] ?? '/login', req.url));
+    }
+    if (pathname.startsWith('/manager') && role !== 'manager') {
+      return NextResponse.redirect(new URL(ROLE_HOME[role!] ?? '/login', req.url));
+    }
+    if (pathname.startsWith('/tenants/') && role !== 'tenant') {
+      return NextResponse.redirect(new URL(ROLE_HOME[role!] ?? '/login', req.url));
+    }
+
     if (pathname === '/overview') {
-      if (role === 'tenant') {
-        return NextResponse.redirect(new URL('/tenants', req.url));
-      } else if (role === 'admin') {
-        return NextResponse.redirect(new URL('/admin/overview', req.url));
-      } else if (role === 'manager') {
-        return NextResponse.redirect(new URL('/manager/overview', req.url));
-      }
+      const homePath = ROLE_HOME[role!] || '/login';
+      return NextResponse.redirect(new URL(homePath, req.url));
     }
 
     if (
@@ -87,14 +99,8 @@ export function middleware(req: NextRequest): NextResponse {
       pathname === '/forgot-password' ||
       pathname === '/reset-password'
     ) {
-      if (role === 'tenant') {
-        return NextResponse.redirect(new URL('/tenants', req.url));
-      } else if (role === 'admin') {
-        return NextResponse.redirect(new URL('/admin/overview', req.url));
-      } else if (role === 'manager') {
-        return NextResponse.redirect(new URL('/manager/overview', req.url));
-      }
-      return NextResponse.redirect(new URL('/overview', req.url));
+      const homePath = ROLE_HOME[role!] || '/login';
+      return NextResponse.redirect(new URL(homePath, req.url));
     }
   }
 
