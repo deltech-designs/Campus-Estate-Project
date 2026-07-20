@@ -46,8 +46,17 @@ if (typeof window !== 'undefined' && !(window as any).__fetchIntercepted) {
         if (data && (data.code === 'INVALID_TOKEN' || data.code === 'NO_TOKEN')) {
           // Clear ems_token cookie (fallback for client-accessible cookies)
           document.cookie = 'ems_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
-          if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/login')) {
-            window.location.href = `/login?clear=true&from=${encodeURIComponent(window.location.pathname)}`;
+          const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+          const isPublicPage =
+            pathname === '/' ||
+            pathname.startsWith('/login') ||
+            pathname.startsWith('/register') ||
+            pathname.startsWith('/forgot-password') ||
+            pathname.startsWith('/reset-password');
+
+          const isMeEndpoint = url.includes('/api/auth/me');
+          if (!isPublicPage && !(isMeEndpoint && data.code === 'NO_TOKEN')) {
+            window.location.href = `/login?clear=true&from=${encodeURIComponent(pathname)}`;
           }
         }
       } catch {
