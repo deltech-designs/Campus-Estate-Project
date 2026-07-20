@@ -21,7 +21,9 @@ export const authService = {
   },
 
   async login(payload: ILoginPayload): Promise<AuthResponse> {
-    const res = await fetch(`${API}/api/auth/login`, {
+    // POST to the Next.js proxy route (/api/auth/login) so it can set the
+    // ems_token cookie on the Vercel domain for the middleware to read.
+    const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -34,7 +36,8 @@ export const authService = {
   },
 
   async logout(): Promise<void> {
-    await fetch(`${API}/api/auth/logout`, {
+    // POST to the Next.js proxy route so it clears the cookie on the Vercel domain.
+    await fetch('/api/auth/logout', {
       method: 'POST',
       credentials: 'include',
     });

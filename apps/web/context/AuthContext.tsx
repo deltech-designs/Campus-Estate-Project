@@ -5,8 +5,8 @@ import type { IUser, UserRole, IRegisterResponse } from '@ems/shared';
 import { authService } from '@/services/auth.service';
 import { API_URL } from '@/lib/config';
 
-if (typeof window !== 'undefined' && !(window as any).__fetchIntercepted) {
-  (window as any).__fetchIntercepted = true;
+if (typeof window !== 'undefined' && !(window as Record<string, unknown>)['__fetchIntercepted']) {
+  (window as Record<string, unknown>)['__fetchIntercepted'] = true;
   const originalFetch = window.fetch;
   window.fetch = async function (input, init) {
     let url = '';
@@ -15,37 +15,19 @@ if (typeof window !== 'undefined' && !(window as any).__fetchIntercepted) {
     } else if (input instanceof URL) {
       url = input.toString();
     } else if (input && 'url' in input) {
-      url = input.url;
+      url = (input as Request).url;
     }
 
     const apiUrl = API_URL;
     const isApiRequest = url.startsWith('/api') || (apiUrl && url.startsWith(`${apiUrl}/api`));
-
-    if (isApiRequest) {
-      const token = document.cookie
-        .split('; ')
-        .find((row) => row.startsWith('ems_token='))
-        ?.split('=')[1];
-
-      if (token) {
-        init = init || {};
-        const headers = new Headers(init.headers);
-        if (!headers.has('Authorization')) {
-          headers.set('Authorization', `Bearer ${token}`);
-        }
-        init.headers = headers;
-      }
-    }
 
     const response = await originalFetch.call(this, input, init);
 
     if (isApiRequest && response.status === 401) {
       try {
         const clone = response.clone();
-        const data = await clone.json();
+        const data = await clone.json() as { code?: string };
         if (data && (data.code === 'INVALID_TOKEN' || data.code === 'NO_TOKEN')) {
-          // Clear ems_token cookie (fallback for client-accessible cookies)
-          document.cookie = 'ems_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
           const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
           const isPublicPage =
             pathname === '/' ||
@@ -67,6 +49,7 @@ if (typeof window !== 'undefined' && !(window as any).__fetchIntercepted) {
     return response;
   };
 }
+
 
 interface AuthContextValue {
   user: IUser | null;
