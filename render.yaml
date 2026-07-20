@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: campus-estate-api
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: pnpm install && pnpm --filter @ems/api build
+    startCommand: pnpm --filter @ems/api start
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "5000"
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: CLIENT_ORIGIN
+        sync: false
