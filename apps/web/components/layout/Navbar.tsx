@@ -7,7 +7,7 @@ import { Button } from '@/components/partials/Button';
 import { useAuth } from '@/context/AuthContext';
 
 export function Navbar() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
   // Close mobile menu when viewport matches desktop breakpoint
@@ -82,7 +82,14 @@ export function Navbar() {
             <span className="w-5 h-5 border-2 border-[var(--color-text-secondary)] border-t-transparent rounded-full animate-spin" />
           ) : isAuthenticated ? (
             <Button 
-              onClick={() => window.location.href = '/overview'} 
+              onClick={() => {
+                const ROLE_HOME: Record<string, string> = {
+                  admin: '/admin/overview',
+                  manager: '/manager/overview',
+                  tenant: '/tenants',
+                };
+                window.location.href = ROLE_HOME[user?.role ?? ''] ?? '/overview';
+              }}
               size="md" 
               className="shadow-[0_4px_12px_var(--color-primary)/0.15] hover:shadow-[0_4px_20px_var(--color-primary)/0.3] hover:scale-[1.01] transition-all"
             >
@@ -155,8 +162,13 @@ export function Navbar() {
                 ) : isAuthenticated ? (
                   <Button
                     onClick={() => {
+                      const ROLE_HOME: Record<string, string> = {
+                        admin: '/admin/overview',
+                        manager: '/manager/overview',
+                        tenant: '/tenants',
+                      };
                       setIsOpen(false);
-                      window.location.href = '/overview';
+                      window.location.href = ROLE_HOME[user?.role ?? ''] ?? '/overview';
                     }}
                     size="lg"
                     className="w-full flex items-center justify-center gap-2 shadow-[0_4px_12px_var(--color-primary)/0.15]"

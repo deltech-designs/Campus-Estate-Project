@@ -3,7 +3,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
@@ -22,7 +21,6 @@ type FormValues = z.infer<typeof schema>;
 
 export function LoginView() {
   const { login } = useAuth();
-  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -39,15 +37,15 @@ export function LoginView() {
     try {
       setError(null);
       const loggedInUser = await login(values.email, values.password);
-      if (loggedInUser.role === 'tenant') {
-        router.push('/tenants');
-      } else if (loggedInUser.role === 'admin') {
-        router.push('/admin/overview');
-      } else if (loggedInUser.role === 'manager') {
-        router.push('/manager/overview');
-      } else {
-        router.push('/overview');
-      }
+      // Use hard navigation so the Next.js middleware gets a fresh request
+      // with the newly-set ems_token cookie on the Vercel domain.
+      const ROLE_HOME: Record<string, string> = {
+        admin: '/admin/overview',
+        manager: '/manager/overview',
+        tenant: '/tenants',
+      };
+      const destination = ROLE_HOME[loggedInUser.role] ?? '/overview';
+      window.location.href = destination;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
     }

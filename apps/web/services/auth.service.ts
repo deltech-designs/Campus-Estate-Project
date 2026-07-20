@@ -44,7 +44,8 @@ export const authService = {
   },
 
   async getMe(): Promise<IUser> {
-    const res = await fetch(`${API}/api/auth/me`, { credentials: 'include' });
+    // Use the Next.js proxy so the Vercel-domain cookie is forwarded to Express as a Bearer token.
+    const res = await fetch('/api/auth/me', { credentials: 'include' });
     const json = await res.json();
     if (!json.success) throw new Error(json.message as string);
     return (json.data as { user: IUser }).user;
