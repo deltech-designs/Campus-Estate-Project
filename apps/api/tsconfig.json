@@ -12,8 +12,10 @@
     "emitDecoratorMetadata": true,
 
     "isolatedModules": false,
-    
-    "lib": ["ES2022", "DOM"] 
+    "skipLibCheck": true,
+
+    "types": ["node"],
+    "lib": ["ES2022"]
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

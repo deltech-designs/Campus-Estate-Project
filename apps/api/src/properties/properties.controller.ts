@@ -2,6 +2,8 @@ import { Response } from 'express';
 import { AuthRequest } from '../shared/middleware/authenticate';
 import { PropertyService } from './properties.service';
 import { sendSuccess } from '../shared/utils/response';
+import type { CreatePropertyDto } from './dtos/create-property.dto';
+import type { UpdatePropertyDto } from './dtos/update-property.dto';
 
 const service = new PropertyService();
 
@@ -18,20 +20,20 @@ export const getPropertyById = async (req: AuthRequest, res: Response): Promise<
 };
 
 export const createProperty = async (req: AuthRequest, res: Response): Promise<void> => {
-  const payload = { ...req.body };
+  const payload = { ...(req.body as Record<string, unknown>) };
   if (req.user) {
     if (req.user.role === 'manager') {
-      payload.landlordId = req.user.id;
-    } else if (req.user.role === 'admin' && !payload.landlordId) {
-      payload.landlordId = req.user.id;
+      payload['landlordId'] = req.user.id;
+    } else if (req.user.role === 'admin' && !(payload['landlordId'])) {
+      payload['landlordId'] = req.user.id;
     }
   }
-  const data = await service.createProperty(payload);
+  const data = await service.createProperty(payload as unknown as CreatePropertyDto);
   sendSuccess(res, data, 'Property created', 201);
 };
 
 export const updateProperty = async (req: AuthRequest, res: Response): Promise<void> => {
-  const data = await service.updateProperty(req.params['id'] as string, req.body);
+  const data = await service.updateProperty(req.params['id'] as string, req.body as unknown as UpdatePropertyDto);
   sendSuccess(res, data, 'Property updated');
 };
 

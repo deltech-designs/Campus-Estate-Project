@@ -32,8 +32,8 @@ export const initPassport = (): void => {
   }
 
   // Passport Serialization
-  passport.serializeUser((user: Express.User, done) => done(null, user));
-  passport.deserializeUser((user: Express.User, done) => done(null, user));
+  passport.serializeUser((user: Express.User, done: (err: Error | null, user?: Express.User | false | null) => void) => done(null, user));
+  passport.deserializeUser((user: Express.User, done: (err: Error | null, user?: Express.User | false | null) => void) => done(null, user));
 
   passport.use(
     new GoogleStrategy(
