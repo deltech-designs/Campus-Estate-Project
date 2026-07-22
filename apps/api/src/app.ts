@@ -5,8 +5,6 @@ import cors from 'cors';
 import morgan from 'morgan';
 import passport from 'passport';
 import helmet from 'helmet';
-
-
 import { initPassport } from './config/passport';
 import { errorHandler } from './shared/middleware/errorHandler';
 import authRoutes from './auth/auth.routes';
