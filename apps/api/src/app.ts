@@ -56,7 +56,7 @@ app.use(
       const allowedOrigins = [
         process.env.CLIENT_ORIGIN || 'http://localhost:3000',
         'http://localhost:3000',
-        'http://127.0.0.1:3000',
+        'http://127.0.0.1:3000',  
         'https://campus-estate-project-web.vercel.app',
         'https://vercel.com/deltechdesigns-projects/campus-estate-project-web/DpgUJAJAq2ybkKHezpDdf8P6uer3',
         'https://campus-estate-project-20hmjon5y-deltechdesigns-projects.vercel.app/',
