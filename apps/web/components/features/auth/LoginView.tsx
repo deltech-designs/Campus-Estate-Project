@@ -42,17 +42,18 @@ export function LoginView() {
       const ROLE_HOME: Record<string, string> = {
         admin: '/admin/overview',
         manager: '/manager/overview',
+        landlord: '/manager/overview',
         tenant: '/tenants',
       };
 
       const searchParams = new URLSearchParams(window.location.search);
       const fromParam = searchParams.get('from');
 
-      let destination = ROLE_HOME[loggedInUser.role] ?? '/overview';
-      if (fromParam && fromParam.startsWith('/') && !fromParam.startsWith('//')) {
+      let destination = ROLE_HOME[loggedInUser.role] ?? '/login';
+      if (fromParam && fromParam.startsWith('/') && !fromParam.startsWith('//') && fromParam !== '/overview') {
         if (
           (loggedInUser.role === 'admin' && fromParam.startsWith('/admin')) ||
-          (loggedInUser.role === 'manager' && fromParam.startsWith('/manager')) ||
+          (((loggedInUser.role as string) === 'manager' || (loggedInUser.role as string) === 'landlord') && (fromParam.startsWith('/manager') || fromParam.startsWith('/landlord'))) ||
           (loggedInUser.role === 'tenant' && (fromParam === '/tenants' || fromParam.startsWith('/tenants/')))
         ) {
           destination = fromParam;

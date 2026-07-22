@@ -4,6 +4,7 @@ import type { NextRequest } from 'next/server';
 const ROLE_HOME: Record<string, string> = {
   admin: '/admin/overview',
   manager: '/manager/overview',
+  landlord: '/manager/overview',
   tenant: '/tenants',
 };
 
@@ -90,7 +91,7 @@ export function middleware(req: NextRequest): NextResponse {
     if (pathname.startsWith('/admin') && role !== 'admin') {
       return NextResponse.redirect(new URL(ROLE_HOME[role!] ?? '/login', req.url));
     }
-    if (pathname.startsWith('/manager') && role !== 'manager') {
+    if ((pathname.startsWith('/manager') || pathname.startsWith('/landlord')) && role !== 'manager' && role !== 'landlord') {
       return NextResponse.redirect(new URL(ROLE_HOME[role!] ?? '/login', req.url));
     }
     if ((pathname === '/tenants' || pathname.startsWith('/tenants/')) && role !== 'tenant') {

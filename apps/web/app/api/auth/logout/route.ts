@@ -13,8 +13,8 @@ export async function POST(req: NextRequest) {
   // Clear the cookie on the Vercel domain
   res.cookies.set('ems_token', '', {
     httpOnly: true,
-    secure: true,
-    sameSite: 'none',
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
     path: '/',
     maxAge: 0,
   });

@@ -86,6 +86,7 @@ export function Navbar() {
                 const ROLE_HOME: Record<string, string> = {
                   admin: '/admin/overview',
                   manager: '/manager/overview',
+                  landlord: '/manager/overview',
                   tenant: '/tenants',
                 };
                 window.location.href = ROLE_HOME[user?.role ?? ''] ?? '/overview';

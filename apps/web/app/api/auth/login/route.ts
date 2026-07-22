@@ -24,8 +24,8 @@ export async function POST(req: NextRequest) {
     // Set the cookie on the Vercel (frontend) domain so Next.js middleware can read it
     res.cookies.set('ems_token', token, {
       httpOnly: true,
-      secure: true,
-      sameSite: 'none',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       path: '/',
       maxAge: 60 * 60 * 24 * 7, // 7 days
     });
