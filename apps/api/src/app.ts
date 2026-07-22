@@ -32,7 +32,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: { secure: process.env.NODE_ENV === 'production' },
-    
+
   }),
 );
 
@@ -52,18 +52,20 @@ app.use(
         callback(null, true);
         return;
       }
-      
+
       const allowedOrigins = [
         process.env.CLIENT_ORIGIN || 'http://localhost:3000',
         'http://localhost:3000',
         'http://127.0.0.1:3000',
         'https://campus-estate-project-web.vercel.app',
+        'https://vercel.com/deltechdesigns-projects/campus-estate-project-web/DpgUJAJAq2ybkKHezpDdf8P6uer3',
+        'https://campus-estate-project-20hmjon5y-deltechdesigns-projects.vercel.app/',
       ];
-      
-      const isAllowed = allowedOrigins.includes(origin) || 
+
+      const isAllowed = allowedOrigins.includes(origin) ||
         (process.env.NODE_ENV !== 'production' && (
-          origin.startsWith('http://localhost:') || 
-          origin.startsWith('http://127.0.0.1:') || 
+          origin.startsWith('http://localhost:') ||
+          origin.startsWith('http://127.0.0.1:') ||
           origin.startsWith('http://192.168.') ||
           origin.startsWith('http://10.') ||
           origin.startsWith('http://172.')
