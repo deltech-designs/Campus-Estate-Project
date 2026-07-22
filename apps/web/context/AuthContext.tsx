@@ -5,8 +5,8 @@ import type { IUser, UserRole, IRegisterResponse } from '@ems/shared';
 import { authService } from '@/services/auth.service';
 import { API_URL } from '@/lib/config';
 
-if (typeof window !== 'undefined' && !(window as Record<string, unknown>)['__fetchIntercepted']) {
-  (window as Record<string, unknown>)['__fetchIntercepted'] = true;
+if (typeof window !== 'undefined' && !(window as unknown as Record<string, unknown>)['__fetchIntercepted']) {
+  (window as unknown as Record<string, unknown>)['__fetchIntercepted'] = true;
   const originalFetch = window.fetch;
   window.fetch = async function (input, init) {
     let url = '';

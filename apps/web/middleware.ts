@@ -11,9 +11,18 @@ function decodeJwt(token: string) {
   try {
     const parts = token.split('.');
     if (parts.length !== 3) return null;
-    const payload = parts[1];
+    let payload = parts[1];
     if (!payload) return null;
-    const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+    payload = payload.replace(/-/g, '+').replace(/_/g, '/');
+    while (payload.length % 4 !== 0) {
+      payload += '=';
+    }
+    const decoded = decodeURIComponent(
+      atob(payload)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
     return JSON.parse(decoded);
   } catch {
     return null;
@@ -84,7 +93,7 @@ export function middleware(req: NextRequest): NextResponse {
     if (pathname.startsWith('/manager') && role !== 'manager') {
       return NextResponse.redirect(new URL(ROLE_HOME[role!] ?? '/login', req.url));
     }
-    if (pathname.startsWith('/tenants/') && role !== 'tenant') {
+    if ((pathname === '/tenants' || pathname.startsWith('/tenants/')) && role !== 'tenant') {
       return NextResponse.redirect(new URL(ROLE_HOME[role!] ?? '/login', req.url));
     }
 

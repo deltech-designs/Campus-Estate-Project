@@ -44,7 +44,21 @@ export function LoginView() {
         manager: '/manager/overview',
         tenant: '/tenants',
       };
-      const destination = ROLE_HOME[loggedInUser.role] ?? '/overview';
+
+      const searchParams = new URLSearchParams(window.location.search);
+      const fromParam = searchParams.get('from');
+
+      let destination = ROLE_HOME[loggedInUser.role] ?? '/overview';
+      if (fromParam && fromParam.startsWith('/') && !fromParam.startsWith('//')) {
+        if (
+          (loggedInUser.role === 'admin' && fromParam.startsWith('/admin')) ||
+          (loggedInUser.role === 'manager' && fromParam.startsWith('/manager')) ||
+          (loggedInUser.role === 'tenant' && (fromParam === '/tenants' || fromParam.startsWith('/tenants/')))
+        ) {
+          destination = fromParam;
+        }
+      }
+
       window.location.href = destination;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
